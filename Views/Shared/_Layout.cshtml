@@ -157,13 +157,14 @@
         <!-- Menu Items -->
         <ul class="nav flex-column sidebar-menu">       
             <li class="nav-item">
-                <a class="nav-link " nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Account" ? "active" : "")"
+                <a class="nav-link">
                     <i class="bi bi-person-fill"></i>
                     <span>Tài khoản</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" data-page="nhan-vien">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Staff" ? "active" : "")"
+                    asp-controller="Staff" asp-action="Index">
                     <i class="bi bi-people-fill"></i>
                     <span>Nhân viên</span>
                 </a>

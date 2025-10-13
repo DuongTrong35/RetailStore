@@ -1,3 +1,77 @@
-﻿@{
+﻿@model RetailStore.Models.Category
+@{
     ViewData["Title"] = "Tạo Danh mục";
+}
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Thêm danh mục Mới</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Quay lại
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken() <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <h5 class="border-bottom pb-2 mb-3">
+                    <i class="bi bi-info-circle text-primary"></i> Thông Tin Cơ Bản
+                </h5>
+
+                <div class="mb-3">
+                    <label asp-for="CategoryName" class="form-label">
+                        Tên Danh mục <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="CategoryName" class="form-control" placeholder="Nhập tên danh mục">
+                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                </div>
+
+                <div class="border-top pt-4 mt-4">
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                            <i class="bi bi-x-circle"></i> Hủy
+                        </a>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-circle"></i> Lưu danh mục
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    h5 {
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+    }
+
+    .breadcrumb {
+        background-color: transparent;
+        padding: 0;
+    }
+</style>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
