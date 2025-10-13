@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using RetailStore.Data;
+using RetailStore.Models;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("Default"),
         new MySqlServerVersion(new Version(8, 0, 39))

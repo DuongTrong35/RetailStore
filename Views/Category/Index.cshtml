@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Danh mục";
+}
+@model IEnumerable<RetailStore.Models.Category>
+<!-- Main Content -->
+<div class="col-md-10">
+    <!-- Top Toolbar -->
+    <div class="bg-white border-bottom p-3 mb-3">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <button class="btn btn-outline-primary">
+                    <i class="bi bi-plus-circle"></i> Thêm
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-danger">
+                    <i class="bi bi-trash"></i> Xóa
+                </button>
+            </div>
+            @* <div class="col-auto">
+                <button class="btn btn-outline-danger">
+                    <i class="bi bi-x-circle"></i> Chuyển trạng thái
+                </button>
+            </div> *@
+            <div class="col-auto">
+                <button class="btn btn-outline-success">
+                    <i class="bi bi-file-earmark-excel"></i> Xuất excel
+                </button>
+            </div>
+            @* <div class="col-auto ms-auto">
+                <select class="form-select" style="width: 150px;">
+                    <option>Tất cả</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <select class="form-select" style="width: 150px;">
+                    <option>Tất cả</option>
+                </select>
+            </div> *@
+            <div class="col-auto">
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" placeholder="Nhập tên danh mục cần tìm">
+                    <button class="btn btn-outline-secondary">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Table -->
+    <div class="px-3">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th><input type="checkbox" class="form-check-input"></th>
+                        <th>Mã Loại</th>
+                        <th>Tên loại</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><input type="checkbox" class="form-check-input"></td>
+                            <td>@item.CategoryId</td>
+                            <td>@item.CategoryName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <style>
+        .nav-link {
+            border-left: 3px solid transparent;
+        }
+
+            .nav-link.active {
+                border-left-color: #0d6efd;
+            }
+
+            .nav-link:hover {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+        .table th {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+    </style>
