@@ -1,5 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Danh mục";
+    if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+        Layout = null;
+    }
+}
+
 }
 @model IEnumerable<RetailStore.Models.Category>
 
