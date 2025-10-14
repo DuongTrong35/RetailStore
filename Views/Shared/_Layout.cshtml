@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="./css/home.css" />
+    <link rel="stylesheet" href="~/css/home.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
@@ -28,69 +28,68 @@
                 </li>
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/HomeIcon.png" alt="" />
+                        <img src="~/Icons/HomeIcon.png" alt="" />
                     </div>
                     <p>Trang chủ</p>
                 </li>
-                <li >
-
+                <li data-url="/Staff/Index">
                     <div class="HomeLeftImg">
-                        <img src="./Icons/staff.png" alt="" />
+                        <img src="~/Icons/staff.png" alt="" />
                     </div>
                     <p>Nhân viên</p>
                 </li>
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/customer-satisfaction.png" alt="" />
+                        <img src="~/Icons/customer-satisfaction.png" alt="" />
                     </div>
                     <p>Khách hàng</p>
                 </li>
                 <li data-url="/Category/Index">
                     <div class="HomeLeftImg">
-                        <img src="./Icons/categories.png" alt="" />
+                        <img src="~/Icons/categories.png" alt="" />
                     </div>
                     <p>Danh mục</p>
                 </li>
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/import.png" alt="" />
+                        <img src="~/Icons/import.png" alt="" />
                     </div>
                     <p>Phiếu nhập</p>
                 </li>
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/invoice.png" alt="" />
+                        <img src="~/Icons/invoice.png" alt="" />
                     </div>
                     <p>Hóa đơn</p>
                 </li>
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/coupon.png" alt="" />
+                        <img src="~/Icons/coupon.png" alt="" />
                     </div>
                     <p>Ưu đãi</p>
                 </li>
 
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/supplier.png" alt="" />
+                        <img src="~/Icons/supplier.png" alt="" />
                     </div>
                     <p>Nhà cung cấp</p>
                 </li>
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/account-settings.png" class="leftcenterarrow" />
+                        <img src="~/Icons/account-settings.png" class="leftcenterarrow" />
                     </div>
                     <p>Tài khoản</p>
                 </li>
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/authorization.png" class="leftcenterarrow" />
+                        <img src="~/Icons/authorization.png" class="leftcenterarrow" />
                     </div>
                     <p>Phân quyền</p>
                 </li>
                 <li>
                     <div class="HomeLeftImg">
-                        <img src="./Icons/statistics.png" class="leftcenterarrow" />
+                        <img src="~/Icons/statistics.png" class="leftcenterarrow" />
                     </div>
                     <p>Thống kê</p>
                 </li>
@@ -106,35 +105,36 @@
             @RenderBody()
         </div>
     </div>
-</body>
-<script>
-    const menuItems = document.querySelectorAll(".HomeLeft li");
-    menuItems.forEach(item => {
-        item.addEventListener("click", () => {
-            menuItems.forEach(i => i.classList.remove("active"));
-            item.classList.add("active");
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const menuItems = document.querySelectorAll(".HomeLeft li");
+        menuItems.forEach(item => {
+            item.addEventListener("click", () => {
+                menuItems.forEach(i => i.classList.remove("active"));
+                item.classList.add("active");
+            });
         });
-    });
 
-    document.querySelectorAll(".HomeLeft li[data-url]").forEach(item => {
-        item.addEventListener("click", () => {
-            const url = item.getAttribute("data-url");
-            fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
-                .then(res => res.text())
-                .then(html => {
-                    document.getElementById("HomeRight").innerHTML = html;
-                })
-                .catch(err => console.error("Lỗi tải view:", err));
+        document.querySelectorAll(".HomeLeft li[data-url]").forEach(item => {
+            item.addEventListener("click", () => {
+                const url = item.getAttribute("data-url");
+                fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById("HomeRight").innerHTML = html;
+                    })
+                    .catch(err => console.error("Lỗi tải view:", err));
+            });
         });
-    });
 
-       function confirmLogout() {
-            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-                // Add your logout logic here
-                window.location.href = '/Account/Logout';
+           function confirmLogout() {
+                if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                    // Add your logout logic here
+                    window.location.href = '/Account/Logout';
+                }
             }
-        }
-</script>
-
-
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>

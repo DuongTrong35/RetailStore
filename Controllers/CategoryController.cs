@@ -32,6 +32,12 @@ namespace RetailStore.Controllers
 
                 // Thực thi truy vấn và trả về danh sách kết quả cho View
                 var categories = await categoriesQuery.ToListAsync();
+                // Thêm logic kiểm tra AJAX vào đây
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return PartialView(categories);
+                }
+
                 return View(categories);
             }
             catch (Exception ex)
@@ -44,6 +50,10 @@ namespace RetailStore.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView(); // Trả về form tạo mới, không có layout
+            }
             return View();
         }
 
@@ -86,8 +96,16 @@ namespace RetailStore.Controllers
                 return NotFound(); // Lỗi nếu không tìm thấy
             }
 
-            // Trả về View "Edit" và truyền đối tượng category vào
+            // 1. Kiểm tra xem đây có phải là một yêu cầu AJAX không
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                // 2. Nếu là AJAX, chỉ trả về nội dung của view (không kèm layout)
+                return PartialView(category);
+            }
+
+            // 3. Nếu là request thông thường, trả về view đầy đủ với layout
             return View(category);
+
         }
 
 

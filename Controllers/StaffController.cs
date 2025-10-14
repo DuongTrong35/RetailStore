@@ -27,6 +27,15 @@ namespace RetailStore.Controllers
                 }
 
                 var staffs = await staffsQuery.ToListAsync();
+
+                // 1. Kiểm tra xem đây có phải là một yêu cầu AJAX không
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    // 2. Nếu là AJAX, chỉ trả về nội dung của view (không kèm layout)
+                    return PartialView(staffs);
+                }
+
+                // 3. Nếu là request thông thường, trả về view đầy đủ với layout
                 return View(staffs);
             }
             catch (Exception ex)
