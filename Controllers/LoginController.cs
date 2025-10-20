@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RetailStore.Models;
+using System.Xml.Linq;
 
 namespace RetailStore.Controllers
 {
@@ -33,10 +34,15 @@ namespace RetailStore.Controllers
             }
             int idrole = 1;
             if (user.Role == "staff") idrole = 2;
+            string nametat = string.Concat(
+    user.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        .Select(word => word[0])
+).ToUpper();
             HttpContext.Session.SetInt32("NumberRole", idrole);
             HttpContext.Session.SetString("UserName", user.Username);
             HttpContext.Session.SetString("UserRole", user.FullName);
             HttpContext.Session.SetString("NameRole", user.Role);
+            HttpContext.Session.SetString("ShortName", nametat);
 
 
             return RedirectToAction("Index", "Home");
