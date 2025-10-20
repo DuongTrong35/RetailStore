@@ -2,7 +2,7 @@
 
 namespace RetailStore.Controllers
 {
-    public class TrangChu : Controller
+    public class TrangChuController : Controller
     {
         public IActionResult Index()
         {

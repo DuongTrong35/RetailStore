@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var role = Context.Session.GetInt32("NumberRole");
+    var username = Context.Session.GetString("UserName");
+    var nameuserole = Context.Session.GetString("UserRole");
+    var namerole = Context.Session.GetString("NameRole");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -20,8 +26,8 @@
                         <div class="d-flex align-items-center" style="display: flex">
                             <div class="user-avatar">BL</div>
                             <div class="ms-3" style="margin-left: 30px; margin-top: -9px">
-                                <div class="user-name">Uzumaki Naruto</div>
-                                <div class="user-role">Admin</div>
+                                <div class="user-name">@nameuserole</div>
+                                <div class="user-role">@namerole</div>
                             </div>
                         </div>
                     </div>
@@ -32,24 +38,30 @@
                     </div>
                     <p>Trang chủ</p>
                 </li>
-                <li data-url="/Staff/Index">
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/staff.png" alt="" />
-                    </div>
-                    <p>Nhân viên</p>
-                </li>
-                <li>
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/customer-satisfaction.png" alt="" />
-                    </div>
-                    <p>Khách hàng</p>
-                </li>
-                <li data-url="/Category/Index">
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/categories.png" alt="" />
-                    </div>
-                    <p>Danh mục</p>
-                </li>
+                @if (role == 1)
+                {
+                    <li data-url="/Staff/Index">
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/staff.png" alt="" />
+                        </div>
+                        <p>Nhân viên</p>
+                    </li>
+                }
+                    <li>
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/customer-satisfaction.png" alt="" />
+                        </div>
+                        <p>Khách hàng</p>
+                    </li>
+                @if (role == 1)
+                {
+                    <li data-url="/Category/Index">
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/categories.png" alt="" />
+                        </div>
+                        <p>Danh mục</p>
+                    </li>
+                }
                 <li>
                     <div class="HomeLeftImg">
                         <img src="~/Icons/import.png" alt="" />
@@ -75,30 +87,44 @@
                     </div>
                     <p>Nhà cung cấp</p>
                 </li>
-                <li>
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/account-settings.png" class="leftcenterarrow" />
-                    </div>
-                    <p>Tài khoản</p>
-                </li>
-                <li>
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/authorization.png" class="leftcenterarrow" />
-                    </div>
-                    <p>Phân quyền</p>
-                </li>
-                <li>
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/statistics.png" class="leftcenterarrow" />
-                    </div>
-                    <p>Thống kê</p>
-                </li>
+                @if (role == 1)
+                {
+                    <li>
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/account-settings.png" class="leftcenterarrow" />
+                        </div>
+                        <p>Tài khoản</p>
+                    </li>
+                    <li>
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/authorization.png" class="leftcenterarrow" />
+                        </div>
+                        <p>Phân quyền</p>
+                    </li>
+                    <li>
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/statistics.png" class="leftcenterarrow" />
+                        </div>
+                        <p>Thống kê</p>
+                    </li>
+                }
             </ul>
+            @if (role == 1)
+                {
             <div class="logout-section">
                 <button class="btn-logout" onclick="confirmLogout()">
                     <i class="bi bi-box-arrow-right me-2"></i>Đăng xuất
                 </button>
-            </div>
+                </div>
+            }
+            else
+            {
+                <div class="logout-section" style="margin-top:292px;">
+                    <button class="btn-logout" onclick="confirmLogout()">
+                        <i class="bi bi-box-arrow-right me-2"></i>Đăng xuất
+                    </button>
+                </div>
+            }
             <!-- </div> -->
         </div>
         <div class="HomeRight" id="HomeRight">
@@ -131,7 +157,7 @@
            function confirmLogout() {
                 if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
                     // Add your logout logic here
-                    window.location.href = '/Account/Logout';
+                    window.location.href = '/';
                 }
             }
     </script>

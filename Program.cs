@@ -1,5 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using RetailStore.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using RetailStore.Models;
 using System;
 
@@ -13,6 +12,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 39))
     ));
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // thời gian hết hạn session
+    options.Cookie.HttpOnly = true; // bảo mật cookie
+    options.Cookie.IsEssential = true; // session luôn hoạt động
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +31,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseStaticFiles();
+
+app.UseSession();
 
 app.UseAuthorization();
 
