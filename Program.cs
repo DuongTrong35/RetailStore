@@ -29,19 +29,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 app.UseStaticFiles();
+app.UseRouting();
 
 app.UseSession();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=TrangChu}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=TrangChu}/{action=Index}/{id?}");
 
 
 app.Run();

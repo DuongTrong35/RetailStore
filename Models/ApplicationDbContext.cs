@@ -78,6 +78,20 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
                 .HasColumnName("phone");
+            entity.Property(e => e.LoyaltyPoints)
+                .HasColumnName("loyalty_points");
+            entity.Property(e => e.CustomerTier)
+                .HasMaxLength(50)
+                .HasColumnName("customer_tier");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("timestamp")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("created_by");
+            entity.Property(e => e.UpdatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("updated_by");
         });
 
         modelBuilder.Entity<Inventory>(entity =>

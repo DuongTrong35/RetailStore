@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: retailstore_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: store_management
+      MYSQL_USER: retailstore
+      MYSQL_PASSWORD: retailstore123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - retailstore_network
+    restart: unless-stopped
+
+  # # ASP.NET Core Application
+  # retailstore:
+  #   build: .
+  #   container_name: retailstore_app
+  #   ports:
+  #     - "5000:8080"
+  #     - "5001:8081"
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://+:8080
+  #     - ConnectionStrings__Default=Server=mysql;Database=store_management;User=root;Password=admin;Port=3306;
+  #   depends_on:
+  #     - mysql
+  #   networks:
+  #     - retailstore_network
+  #   restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  retailstore_network:
+    driver: bridge
+
