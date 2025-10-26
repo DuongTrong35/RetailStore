@@ -1,27 +1,23 @@
 ﻿@{
-    ViewData["Title"] = "Danh mục";
+    ViewData["Title"] = "Tài khoản";
     if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
     {
         Layout = null;
     }
 }
 
+@model IEnumerable<RetailStore.Models.User>
 
-@model IEnumerable<RetailStore.Models.Category>
-
-<div class="col-md-10">
+<div>
     <div class="bg-white border-bottom p-3 mb-3">
         <div class="row align-items-center">
-            <div class="col-auto">
-                <a class="btn btn-outline-primary" asp-controller="Category" asp-action="Create">
-                    <i class="bi bi-plus-circle"></i> Thêm
-                </a>
-            </div>
-
             <div class="col">
+                <h2 class="mb-0">Quản lý tài khoản</h2>
+            </div>
+            <div class="col-auto">
                 <form asp-action="Index" method="get" class="d-flex justify-content-end">
                     <div class="input-group" style="width: 300px;">
-                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Nhập tên danh mục...">
+                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Nhập tên, username... " onfocus="this.value=''">
                         <button type="submit" class="btn btn-outline-secondary">
                             <i class="bi bi-search"></i>
                         </button>
@@ -34,9 +30,13 @@
     <form asp-action="DeleteSelected" method="post">
         @Html.AntiForgeryToken()
 
-        <div class="mb-3">
+        <div class="mb-3 d-flex align-items-center px-3">
+            <a class="btn btn-outline-primary me-2" asp-controller="Account" asp-action="Create">
+                <i class="bi bi-plus-circle"></i> Thêm tài khoản
+            </a>
+
             <button type="submit" class="btn btn-outline-danger"
-                    onclick="return confirm('Bạn có chắc chắn muốn xóa các mục đã chọn?');">
+                    onclick="return confirm('Bạn có chắc chắn muốn xóa các tài khoản đã chọn?');">
                 <i class="bi bi-trash"></i> Xóa mục đã chọn
             </button>
         </div>
@@ -47,8 +47,10 @@
                     <thead class="table-light">
                         <tr>
                             <th><input type="checkbox" class="form-check-input" id="selectAll"></th>
-                            <th>Mã Loại</th>
-                            <th>Tên loại</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Họ và tên</th>
+                            <th>Vai trò</th>
+                            <th>Ngày tạo</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -60,12 +62,14 @@
                                 <tr>
                                     <td>
                                         <input type="checkbox" class="form-check-input row-checkbox"
-                                               name="selectedIds" value="@item.CategoryId">
+                                               name="selectedIds" value="@item.UserId">
                                     </td>
-                                    <td>@item.CategoryId</td>
-                                    <td>@item.CategoryName</td>
+                                    <td>@item.Username</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Role</td>
+                                    <td>@item.CreatedAt.Value.ToString("dd/MM/yyyy")</td>
                                     <td>
-                                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.CategoryId">
+                                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.UserId">
                                             <i class="bi bi-pencil"></i> Sửa
                                         </a>
                                     </td>
@@ -75,7 +79,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="4" class="text-center">Không có dữ liệu.</td>
+                                <td colspan="6" class="text-center">Không có dữ liệu.</td>
                             </tr>
                         }
                     </tbody>
@@ -84,6 +88,7 @@
         </div>
     </form>
 </div>
+
 <style>
     .nav-link {
         border-left: 3px solid transparent;
@@ -106,6 +111,7 @@
         vertical-align: middle;
     }
 </style>
+
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
