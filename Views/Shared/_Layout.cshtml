@@ -4,6 +4,7 @@
     var nameuserole = Context.Session.GetString("UserRole");
     var namerole = Context.Session.GetString("NameRole");
     var nameshort = Context.Session.GetString("ShortName");
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/RetailStore.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/User.css" asp-append-version="true" />
 </head>
 <body>
     <div class="HomeContainer">
@@ -33,7 +35,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="active">
+                <li class="@(currentController == "Home" ? "active" : "")">
                     <div class="HomeLeftImg">
                         <img src="~/Icons/HomeIcon.png" alt="" />
                     </div>
@@ -41,14 +43,14 @@
                 </li>
                 @if (role == 1)
                 {
-                    <li data-url="/Staff/Index">
+                    <li class="@(currentController == "Staff" ? "active" : "")" data-url="/Staff/Index">
                         <div class="HomeLeftImg">
                             <img src="~/Icons/staff.png" alt="" />
                         </div>
                         <p>Nhân viên</p>
                     </li>
                 }
-                    <li data-url="/Customer/Index">
+                <li class="@(currentController == "Customer" ? "active" : "")"  data-url="/Customer/Index">
                         <div class="HomeLeftImg">
                             <img src="~/Icons/customer-satisfaction.png" alt="" />
                         </div>
@@ -56,7 +58,7 @@
                     </li>
                 @if (role == 1)
                 {
-                    <li data-url="/Category/Index">
+                    <li class="@(currentController == "Category" ? "active" : "")" data-url="/Category/Index">
                         <div class="HomeLeftImg">
                             <img src="~/Icons/categories.png" alt="" />
                         </div>
@@ -90,7 +92,7 @@
                 </li>
                 @if (role == 1)
                 {
-                    <li>
+                    <li class="@(currentController == "Account" ? "active" : "")" data-url="/Account/Index">
                         <div class="HomeLeftImg">
                             <img src="~/Icons/account-settings.png" class="leftcenterarrow" />
                         </div>
