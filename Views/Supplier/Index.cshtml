@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Nhà cung cấp";
+    if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+        Layout = null;
+    }
+}
+
+@model IEnumerable<RetailStore.Models.Supplier>
+
+<div>
+    <div class="bg-white border-bottom p-3 mb-3">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="mb-0">Quản lý nhà cung cấp</h2>
+            </div>
+            <div class="col-auto">
+                <form asp-action="Index" method="get" class="d-flex justify-content-end">
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Nhập tên, SĐT, email..." onfocus="this.value=''">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="DeleteSelected" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3 d-flex align-items-center px-3">
+            <a class="btn btn-outline-primary me-2" asp-controller="Supplier" asp-action="Create">
+                <i class="bi bi-plus-circle"></i> Thêm nhà cung cấp
+            </a>
+
+            <button type="submit" class="btn btn-outline-danger"
+                    onclick="return confirm('Bạn có chắc chắn muốn xóa các nhà cung cấp đã chọn?');">
+                <i class="bi bi-trash"></i> Xóa mục đã chọn
+            </button>
+        </div>
+
+        <div class="px-3">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th><input type="checkbox" class="form-check-input" id="selectAll"></th>
+                            <th>Tên nhà cung cấp</th>
+                            <th>Số điện thoại</th>
+                            <th>Email</th>
+                            <th>Địa chỉ</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input row-checkbox"
+                                               name="selectedIds" value="@item.SupplierId">
+                                    </td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Address</td>
+                                    <td>
+                                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.SupplierId">
+                                            <i class="bi bi-pencil"></i> Sửa
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Không có dữ liệu.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .nav-link {
+        border-left: 3px solid transparent;
+    }
+
+        .nav-link.active {
+            border-left-color: #0d6efd;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+    .table th {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+
+            selectAllCheckbox.addEventListener('change', function () {
+                rowCheckboxes.forEach(checkbox => {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
+        });
+    </script>
+}
