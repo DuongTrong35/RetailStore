@@ -48,7 +48,7 @@ namespace RetailStore.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Không thể lấy danh sách khách hàng.");
-                return View("Error");
+                return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
             }
         }
 
@@ -197,3 +197,4 @@ namespace RetailStore.Controllers
         }
     }
 }
+
