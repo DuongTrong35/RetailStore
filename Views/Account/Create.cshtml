@@ -17,6 +17,8 @@
         <form asp-action="Create" method="post">
             @Html.AntiForgeryToken()
 
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
             <div class="row">
                 <div class="col-md-8">
                     <div class="bg-white p-4 rounded-3 shadow-sm">
@@ -24,26 +26,33 @@
                         <div class="mb-3">
                             <label asp-for="Username" class="form-label">Tên đăng nhập</label>
                             <input asp-for="Username" class="form-control" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Password" class="form-label">Mật khẩu</label>
                             <input asp-for="Password" type="password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="FullName" class="form-label">Họ và tên</label>
                             <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Role" class="form-label">Vai trò (Role)</label>
-                            <input asp-for="Role" class="form-control" />
+
+                            <select asp-for="Role" class="form-select" asp-items="ViewBag.Roles">
+                                <option value="">-- Chọn vai trò --</option>
+                            </select>
+
+                            <span asp-validation-for="Role" class="text-danger"></span>
                         </div>
 
                         <div class="mt-4">
                             <button type="submit" class="btn btn-primary">Tạo mới</button>
-
                             <a asp-action="Index" class="btn btn-outline-secondary ms-2">Hủy</a>
                         </div>
                     </div>
@@ -52,3 +61,9 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

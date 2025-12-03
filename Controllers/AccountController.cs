@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RetailStore.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
 
 namespace RetailStore.Controllers
 {
@@ -55,6 +56,8 @@ namespace RetailStore.Controllers
         {
             var model = new User();
 
+            ViewBag.Roles = new SelectList(new[] { "admin", "staff" });
+
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return PartialView(model);
@@ -85,6 +88,8 @@ namespace RetailStore.Controllers
                 ModelState.AddModelError("", "Không thể lưu tài khoản, vui lòng thử lại.");
             }
 
+            ViewBag.Roles = new SelectList(new[] { "admin", "staff" });
+
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return PartialView(user);
@@ -104,7 +109,7 @@ namespace RetailStore.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Roles = new SelectList(new[] { "admin", "staff" });
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return PartialView(user);
@@ -114,11 +119,22 @@ namespace RetailStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,FullName,Role")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId, Password, Username,FullName,Role")] User user)
         {
+            _logger.LogInformation($"Edit POST: UserId={id}, ModelState.IsValid={ModelState.IsValid}");
+
             if (id != user.UserId)
             {
+                _logger.LogWarning($"ID mismatch: URL id={id}, user.UserId={user.UserId}");
                 return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    _logger.LogError($"Validation error: {error.ErrorMessage}");
+                }
             }
 
             if (ModelState.IsValid)
@@ -148,6 +164,8 @@ namespace RetailStore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Roles = new SelectList(new[] { "admin", "staff" });
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
