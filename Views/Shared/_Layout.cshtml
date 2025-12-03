@@ -104,7 +104,7 @@
                         </div>
                         <p>Phân quyền</p>
                     </li>
-                    <li>
+                    <li class="@(currentController == "Dashboard" ? "active" : "")" data-url="/Dashboard/Index">
                         <div class="HomeLeftImg">
                             <img src="~/Icons/statistics.png" class="leftcenterarrow" />
                         </div>
@@ -136,7 +136,9 @@
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <script>
+        console.log("Layout loaded");
         const menuItems = document.querySelectorAll(".HomeLeft li");
         menuItems.forEach(item => {
             item.addEventListener("click", () => {
@@ -145,16 +147,36 @@
             });
         });
 
-        document.querySelectorAll(".HomeLeft li[data-url]").forEach(item => {
+                document.querySelectorAll(".HomeLeft li[data-url]").forEach(item => {
             item.addEventListener("click", () => {
                 const url = item.getAttribute("data-url");
+                if (url.toLowerCase().includes("dashboard")) {
+                    // Chuyển trang theo cách truyền thống (Load lại toàn bộ trang)
+                    window.location.href = url;
+                    return; // Dừng hàm, không chạy code AJAX bên dưới
+                }
+                // Cập nhật URL trên trình duyệt mà không load lại trang
+                history.pushState(null, "", url);
+
+                // Gọi AJAX
                 fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
                     .then(res => res.text())
                     .then(html => {
-                        document.getElementById("HomeRight").innerHTML = html;
+
+                        //(Dùng jQuery để chạy script):
+                        $("#HomeRight").html(html);
+
+                        // Cập nhật lại class active cho menu
+                        document.querySelectorAll(".HomeLeft li").forEach(i => i.classList.remove("active"));
+                        item.classList.add("active");
                     })
                     .catch(err => console.error("Lỗi tải view:", err));
             });
+        });
+
+        // Xử lý nút Back/Forward của trình duyệt để load lại nội dung đúng
+        window.addEventListener("popstate", () => {
+            location.reload(); // Cách đơn giản nhất: load lại trang khi ấn Back
         });
 
            function confirmLogout() {
