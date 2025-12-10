@@ -20,11 +20,17 @@ namespace RetailStore.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, string selectedRole, DateTime? fromDate, DateTime? toDate)
         {
             try
             {
                 ViewData["CurrentFilter"] = searchString;
+                ViewData["SelectedRole"] = selectedRole;
+                ViewData["FromDate"] = fromDate?.ToString("yyyy-MM-dd"); // Định dạng cho input date
+                ViewData["ToDate"] = toDate?.ToString("yyyy-MM-dd"); // Định dạng cho input date
+
+                var roles = await _context.Users.Select(u => u.Role).Distinct().ToListAsync();
+                ViewBag.Roles = roles;
 
                 var usersQuery = _context.Users.AsQueryable();
 
@@ -34,6 +40,22 @@ namespace RetailStore.Controllers
                         u.Username.Contains(searchString) ||
                         u.FullName.Contains(searchString)
                     );
+                }
+
+                if (!string.IsNullOrEmpty(selectedRole))
+                {
+                    usersQuery = usersQuery.Where(u => u.Role == selectedRole);
+                }
+
+                if (fromDate.HasValue)
+                {
+                    usersQuery = usersQuery.Where(u => u.CreatedAt >= fromDate.Value);
+                }
+                if (toDate.HasValue)
+                {
+                    // Lấy đến cuối ngày đó (23:59:59) để đảm bảo chính xác
+                    var endOfDate = toDate.Value.Date.AddDays(1).AddTicks(-1);
+                    usersQuery = usersQuery.Where(u => u.CreatedAt <= endOfDate);
                 }
 
                 var users = await usersQuery.ToListAsync();

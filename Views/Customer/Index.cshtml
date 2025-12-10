@@ -7,15 +7,12 @@
 }
 @model IEnumerable<RetailStore.Models.Customer>
 
-<div class="col-md-10">
+<div>
     <div class="bg-white border-bottom p-3 mb-3">
         <div class="row align-items-center">
-            <div class="col-auto">
-                <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="Create">
-                    <i class="bi bi-plus-circle"></i> Thêm
-                </a>
+            <div class="col">
+                <h2 class="mb-0">Quản lý khách hàng</h2>
             </div>
-
             <div class="col">
                 <form asp-action="Index" method="get" class="d-flex justify-content-end">
                     <div class="input-group" style="width: 300px;">
@@ -32,7 +29,11 @@
     <form asp-action="DeleteSelected" method="post">
         @Html.AntiForgeryToken()
 
-        <div class="mb-3">
+        <div class="mb-3 px-3">
+            <a class="btn btn-outline-primary" asp-controller="Customer" asp-action="Create">
+                <i class="bi bi-plus-circle"></i> Thêm
+            </a>
+
             <button type="submit" class="btn btn-outline-danger"
                     onclick="return confirm('Bạn có chắc chắn muốn xóa các mục đã chọn?');">
                 <i class="bi bi-trash"></i> Xóa mục đã chọn
