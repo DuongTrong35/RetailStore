@@ -21,8 +21,8 @@ namespace RetailStore.Controllers
                 ViewBag.SelectedDays = days;
                 var viewModel = new DashboardViewModel
                 {
-                    TotalRevenue = await GetTotalRevenue(days),
-                    TotalOrders = await GetTotalOrders(days),
+                    TotalRevenue = await GetTotalRevenue(),
+                    TotalOrders = await GetTotalOrders(),
                     TotalProducts = await GetTotalProducts(),
                     TotalCustomers = await GetTotalCustomers(),
                     RevenueChart = await GetRevenueChartData(days),
@@ -40,21 +40,21 @@ namespace RetailStore.Controllers
             }
         }
 
-        private async Task<decimal> GetTotalRevenue(int days)
+        private async Task<decimal> GetTotalRevenue()
         {
-            var startDate = DateTime.Now.AddDays(-days);
+            //var startDate = DateTime.Now.AddDays(-days);
 
             return await _context.Orders
-                .Where(o => o.OrderDate >= startDate)
+                //.Where(o => o.OrderDate >= startDate)
                 .SumAsync(o => o.TotalAmount) ?? 0;
         }
 
-        private async Task<int> GetTotalOrders(int days)
+        private async Task<int> GetTotalOrders()
         {
-            var startDate = DateTime.Now.AddDays(-days);
+            //var startDate = DateTime.Now.AddDays(-days);
 
             return await _context.Orders
-                .Where(o => o.OrderDate >= startDate)
+                //.Where(o => o.OrderDate >= startDate)
                 .CountAsync();
         }
 

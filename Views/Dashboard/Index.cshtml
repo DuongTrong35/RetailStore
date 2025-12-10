@@ -4,6 +4,17 @@
     {
         Layout = null;
     }
+
+    int selectedDays = ViewBag.SelectedDays != null ? (int)ViewBag.SelectedDays : 30;
+
+    string chartTitle = selectedDays switch
+    {
+        7 => "Doanh thu 7 ngày qua",
+        30 => "Doanh thu 30 ngày qua",
+        90 => "Doanh thu 90 ngày qua",
+        365 => "Doanh thu năm nay",
+        _ => $"Doanh thu {selectedDays} ngày qua"
+    };
 }
 
 @model DashboardViewModel
@@ -13,9 +24,6 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">📊 Dashboard Thống Kê</h2>
         <div>
-            @{
-                int selectedDays = ViewBag.SelectedDays != null ? (int)ViewBag.SelectedDays : 30;
-            }
             <select class="form-select form-select-sm" id="dateRangeFilter" style="width: auto; display: inline-block;">
                 <option value="7" selected="@(selectedDays == 7 ? "selected" : null)">7 ngày qua</option>
                 <option value="30" selected="@(selectedDays == 30 ? "selected" : null)">30 ngày qua</option>
@@ -107,7 +115,7 @@
         <div class="col-xl-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-0 pt-3">
-                    <h5 class="mb-0">📈 Doanh thu 30 ngày gần đây</h5>
+                    <h5 class="mb-0">📈 @chartTitle</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="revenueChart" height="80"></canvas>
