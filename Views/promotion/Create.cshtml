@@ -1,0 +1,183 @@
+@model RetailStore.Models.Promotion
+
+@{
+    ViewData["Title"] = "Thêm ưu đãi";
+    if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+        Layout = null;
+    }
+}
+
+<div>
+    <div class="bg-white border-bottom p-3 mb-3">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="mb-0">Thêm ưu đãi mới</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="px-3">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="PromoCode" class="form-label">Mã khuyến mãi</label>
+                    <input asp-for="PromoCode" class="form-control" />
+                    <span asp-validation-for="PromoCode" class="text-danger"></span>
+                </div>
+                <div class="col-md-8">
+                    <label asp-for="Description" class="form-label">Mô tả</label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mt-0">
+                <div class="col-md-4">
+                    <label asp-for="DiscountType" class="form-label">Loại giảm</label>
+                    <select asp-for="DiscountType" class="form-select">
+                        <option value="percent">Phần trăm</option>
+                        <option value="fixed">Cố định</option>
+                    </select>
+                    <span asp-validation-for="DiscountType" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="DiscountValue" class="form-label">Giá trị giảm</label>
+                    <input asp-for="DiscountValue" class="form-control" />
+                    <span asp-validation-for="DiscountValue" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="MinOrderAmount" class="form-label">Đơn tối thiểu</label>
+                    <input asp-for="MinOrderAmount" class="form-control" />
+                    <span asp-validation-for="MinOrderAmount" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mt-0">
+                <div class="col-md-4">
+                    <label asp-for="StartDate" class="form-label">Ngày bắt đầu</label>
+                    <input asp-for="StartDate" class="form-control" type="date" id="startDate" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="EndDate" class="form-label">Ngày kết thúc</label>
+                    <input asp-for="EndDate" class="form-control" type="date" id="endDate" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="UsageLimit" class="form-label">Giới hạn sử dụng</label>
+                    <input asp-for="UsageLimit" class="form-control" />
+                    <span asp-validation-for="UsageLimit" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mt-0">
+                <div class="col-md-4">
+                    <label asp-for="Status" class="form-label">Trạng thái</label>
+                    <select asp-for="Status" class="form-select">
+                        <option value="active">Hoạt động</option>
+                        <option value="inactive">Ngưng</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Lưu
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle"></i> Hủy
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        (function () {
+            const today = new Date();
+            const formatDate = (d) => {
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${d.getFullYear()}-${m}-${day}`;
+            };
+
+            const start = document.getElementById('startDate');
+            const end = document.getElementById('endDate');
+            if (!start || !end) return;
+
+            const todayStr = formatDate(today);
+            if (!start.value) start.value = todayStr;
+            start.min = todayStr;
+
+            // end date >= start 
+            const defaultEnd = new Date(today.getTime());
+            defaultEnd.setDate(defaultEnd.getDate() + 1);
+            const defaultEndStr = formatDate(defaultEnd);
+            if (!end.value) end.value = defaultEndStr;
+            end.min = start.value;
+
+            start.addEventListener('change', () => {
+                if (end.value < start.value) {
+                    end.value = start.value;
+                }
+                end.min = start.value;
+            });
+
+
+            const discountValue = document.querySelector('input[name="DiscountValue"]');
+            const minOrderAmount = document.querySelector('input[name="MinOrderAmount"]');
+            const discountType = document.querySelector('select[name="DiscountType"]');
+            
+            function formatDecimalInput(input) {
+                if (!input) return;
+                const val = parseFloat(input.value);
+                if (!isNaN(val) && val === Math.floor(val)) {
+                    input.value = Math.floor(val);
+                }
+            }
+
+            if (discountValue) {
+                formatDecimalInput(discountValue);
+                discountValue.addEventListener('blur', () => formatDecimalInput(discountValue));
+            }
+            if (minOrderAmount) {
+                formatDecimalInput(minOrderAmount);
+                minOrderAmount.addEventListener('blur', () => formatDecimalInput(minOrderAmount));
+            }
+
+            // điều kiện 1-100 nếu là phần trăm
+            function applyDiscountConstraints() {
+                if (!discountValue || !discountType) return;
+                if (discountType.value === 'percent') {
+                    discountValue.min = '1';
+                    discountValue.max = '100';
+                    if (discountValue.value) {
+                        const v = parseFloat(discountValue.value);
+                        if (!isNaN(v)) {
+                            if (v < 1) discountValue.value = '0';
+                            if (v > 100) discountValue.value = '100';
+                        }
+                    }
+                } else {
+                    discountValue.min = '0';
+                    discountValue.removeAttribute('max');
+                }
+            }
+            applyDiscountConstraints();
+            if (discountType) {
+                discountType.addEventListener('change', applyDiscountConstraints);
+            }
+        })();
+    </script>
+}
