@@ -62,8 +62,27 @@ namespace RetailStore.Controllers
                 .Include(o => o.Payments)
                 .FirstOrDefault(o => o.OrderId == id);
 
-            if (order == null)
-                return NotFound();
+            if (order == null) return NotFound();
+
+            var productIds = order.OrderItems.Select(i => i.ProductId).ToList();
+
+            var products = _context.Products
+                .Where(p => productIds.Contains(p.ProductId))
+                .ToList();
+
+            foreach (var item in order.OrderItems)
+            {
+                var productInfo = products.FirstOrDefault(p => p.ProductId == item.ProductId);
+
+                if (productInfo != null)
+                {
+                    item.ProductName = productInfo.ProductName; // Gán tên
+                }
+                else
+                {
+                    item.ProductName = "Sản phẩm đã bị xóa"; 
+                }
+            }
 
             return View(order);
         }
