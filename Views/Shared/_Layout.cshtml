@@ -24,7 +24,7 @@
     <div class="HomeContainer">
         <div class="HomeLeft">
             <!-- <div class="HomeLeftCover"> -->
-            <ul style="padding:0;">
+            <ul style="height: 100%;padding:0;margin: 0;">
                 <li style="width: 100%; height: 100px; ">
                     <div class="user-profile" style="width: 100%; height: 100%;background-color: blanchedalmond;">
                         <div class="d-flex align-items-center" style="display: flex">
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="@(currentController == "Home" ? "active" : "")">
+                <li class="@(currentController == "Home" ? "active" : "")" data-url="/TrangChu/HomeEmployee">
                     <div class="HomeLeftImg">
                         <img src="~/Icons/HomeIcon.png" alt="" />
                     </div>
@@ -131,7 +131,10 @@
             }
             <!-- </div> -->
         </div>
-        <div class="HomeRight" id="HomeRight">
+        <div class="HomeRight" id="HomeRight" style="
+    height: 110%;
+">
+            >
             @RenderBody()
         </div>
     </div>
