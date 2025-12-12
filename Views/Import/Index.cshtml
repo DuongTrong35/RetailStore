@@ -1,4 +1,11 @@
-﻿@model IEnumerable<RetailStore.Models.ImportReceipt>
+﻿@{
+    ViewData["Title"] = "Phiếu nhập";
+    if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+        Layout = null;
+    }
+}
+@model IEnumerable<RetailStore.Models.ImportReceipt>
 
     @{
     ViewData["Title"] = "Quản lý nhập kho";
