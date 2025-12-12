@@ -1,0 +1,119 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RetailStore.Models.Order
+
+<div class="container mt-4">
+
+    <h3>Chi tiết hóa đơn #@Model.OrderId</h3>
+
+    <!-- Nút Quay lại -->
+    <button class="btn btn-secondary mb-3 menubtn" data-url="/Bill/Index">
+        <i class="bi bi-arrow-left"></i> Quay lại
+    </button>
+
+
+
+    <hr />
+
+    <h5>Thông tin hóa đơn</h5>
+    <table class="table table-bordered">
+        <tr><th>Mã hóa đơn</th><td>@Model.OrderId</td></tr>
+        <tr><th>Ngày tạo</th><td>@Model.OrderDate?.ToString("dd/MM/yyyy")</td></tr>
+        <tr><th>Trạng thái</th><td>@Model.Status</td></tr>
+        <tr>
+            <th>Tổng tiền</th>
+            <td>
+                @(Model.TotalAmount.HasValue
+                                ? Model.TotalAmount.Value.ToString("N0") + " ₫"
+                                : "0 ₫")
+            </td>
+        </tr>
+        <tr>
+            <th>Giảm giá</th>
+            <td>
+                @(Model.DiscountAmount.HasValue
+                                ? Model.DiscountAmount.Value.ToString("N0") + " ₫"
+                                : "0 ₫")
+            </td>
+        </tr>
+    </table>
+
+    <h5>Sản phẩm trong đơn</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.Price.ToString("N0") ₫</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Subtotal.ToString("N0") ₫</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h5>Thanh toán</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Phương thức</th>
+                <th>Số tiền</th>
+                <th>Ngày thanh toán</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pay in Model.Payments)
+            {
+                <tr>
+                    <td>@pay.PaymentMethod</td>
+                    <td>@pay.Amount.ToString("N0") ₫</td>
+                    <td>
+                        @(pay.PaymentDate.HasValue
+                                            ? pay.PaymentDate.Value.ToString("dd/MM/yyyy")
+                                            : "")
+                </td>
+            </tr>
+                        }
+        </tbody>
+    </table>
+</div>
+<script>
+        document.querySelectorAll('[data-url]').forEach(item => {
+        item.addEventListener("click", () => {
+            const url = item.getAttribute("data-url");
+
+            if (url.toLowerCase().includes("dashboard")) {
+                window.location.href = url;
+                return;
+            }
+
+            history.pushState(null, "", url);
+
+            fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                .then(res => res.text())
+                .then(html => {
+                    $("#HomeRight").html(html);
+
+                    // Nếu là menu thì highlight active
+                    if (item.tagName === "LI") {
+                        document.querySelectorAll(".HomeLeft li").forEach(i => i.classList.remove("active"));
+                        item.classList.add("active");
+                    }
+                })
+                .catch(err => console.error("Lỗi tải view:", err));
+        });
+    });
+
+</script>

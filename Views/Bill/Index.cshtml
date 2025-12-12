@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "Hóa đơn";
+    Layout = null;
+}
+@model IEnumerable<RetailStore.Models.Order>
+
+<div class="col-md-12">
+    <div class="bg-white border-bottom p-3 mb-3">
+        <div class="row align-items-center">
+
+            <div class="col d-flex justify-content-end">
+                <form asp-action="Index" method="get" class="d-flex">
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
+                               class="form-control" placeholder="Nhập mã hóa đơn...">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="row mt-3">
+            <div class="col d-flex justify-content-end">
+                <form asp-action="Index" method="get" class="d-flex gap-2">
+
+                    <input type="date" name="dateFrom" class="form-control"
+                           value="@ViewData["DateFrom"]" style="width: 180px;" />
+
+                    <input type="date" name="dateTo" class="form-control"
+                           value="@ViewData["DateTo"]" style="width: 180px;" />
+
+                    <button type="submit" class="btn btn-primary">
+                        Lọc theo ngày
+                    </button>
+                    <a class="btn btn-secondary" href="/Bill/Index">
+                        Làm mới
+                    </a>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="px-3">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Mã hóa đơn</th>
+                    <th>Tổng tiền</th>
+                    <th>Giảm giá</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.OrderId</td>
+                            <td>@String.Format("{0:N0}₫", item.TotalAmount)</td>
+                            <td>@String.Format("{0:N0}₫", item.DiscountAmount)</td>
+
+                            <td>
+                                @if (item.Status == "paid")
+                                {
+                                    <span class="badge bg-success">Đã thanh toán</span>
+                                }
+                                else if (item.Status == "pending")
+                                {
+                                    <button class="btn btn-sm btn-success btn-pay" data-id="@item.OrderId">
+                                        Thanh toán
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Khác</span>
+                                }
+                    </td>
+
+                    <td>
+                        @(item.OrderDate.HasValue
+                                                ? item.OrderDate.Value.ToString("dd/MM/yyyy")
+                                                : "")
+                    </td>
+
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.OrderId"
+                                   class="btn btn-sm btn-primary">Xem</a>
+                            </td>
+                        </tr>
+                                }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">Không có dữ liệu.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("btn-pay")) {
+            const orderId = e.target.getAttribute("data-id");
+
+            if (!confirm("Xác nhận thanh toán hoá đơn #" + orderId + "?")) return;
+
+            fetch("/Bill/MarkPaid/" + orderId, {
+                method: "POST"
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Thanh toán thành công!");
+                    location.reload();
+                } else {
+                    alert("Lỗi: " + data.message);
+                }
+            })
+            .catch(err => console.error(err));
+        }
+    });
+</script>
