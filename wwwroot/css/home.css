@@ -6,19 +6,25 @@
 
 .HomeContainer {
     width: 100%;
-    height: 837px;
+    height: 100vh;
     display: flex;
 }
 
 .HomeLeft {
     background-color: #66FF99;
     width: 25%;
-    height: 837px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh; 
+    justify-content: space-between;
 }
 
 .HomeRight {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
     background-color: white;
-    width: 75%;
+    background-color: #f5f5f5;
 }
 
 .user-profile {
@@ -59,6 +65,12 @@
 .HomeLeft {
     list-style: none;
 }
+    .HomeLeft ul {
+        /* THÊM MỚI: */
+        flex: 1; /* Chiếm toàn bộ khoảng trống còn lại */
+        overflow-y: auto; /* Nếu menu dài quá thì chỉ cuộn đoạn menu này thôi */
+        margin-bottom: 0; /* Reset margin nếu có */
+    }
 
     .HomeLeft ul li {
         display: flex;
