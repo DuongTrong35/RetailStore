@@ -18,6 +18,7 @@
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/RetailStore.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/User.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
 <body>
     <div class="HomeContainer">
@@ -65,7 +66,7 @@
                         <p>Danh mục</p>
                     </li>
                 }
-                <li>
+                <li class="@(currentController == "Import" ? "active" : "")" data-url="/Import/Index">
                     <div class="HomeLeftImg">
                         <img src="~/Icons/import.png" alt="" />
                     </div>

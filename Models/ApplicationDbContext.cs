@@ -15,6 +15,9 @@ public partial class ApplicationDbContext : DbContext
         : base(options)
     {
     }
+    public virtual DbSet<ImportReceipt> ImportReceipts { get; set; }
+
+    public virtual DbSet<ImportDetail> ImportDetails { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
 
@@ -294,6 +297,64 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .HasColumnName("username");
+        });
+
+        modelBuilder.Entity<ImportReceipt>(entity =>
+        {
+            entity.HasKey(e => e.ImportId).HasName("PRIMARY");
+
+            entity.ToTable("import_receipts");
+
+            entity.Property(e => e.ImportId).HasColumnName("import_id");
+            entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.TotalAmount)
+                .HasPrecision(10, 2)
+                .HasColumnName("total_amount");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp")
+                .HasColumnName("created_at");
+
+            // Thiết lập khóa ngoại (Relationships)
+            entity.HasOne(d => d.Supplier)
+                .WithMany() // Một Supplier có nhiều phiếu nhập (nếu muốn) hoặc để trống
+                .HasForeignKey(d => d.SupplierId)
+                .HasConstraintName("import_receipts_ibfk_1"); 
+
+            entity.HasOne(d => d.User)
+                .WithMany()
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("import_receipts_ibfk_2");
+        });
+
+        modelBuilder.Entity<ImportDetail>(entity =>
+        {
+            entity.HasKey(e => e.ImportDetailId).HasName("PRIMARY");
+
+            entity.ToTable("import_details");
+
+            entity.Property(e => e.ImportDetailId).HasColumnName("import_detail_id");
+            entity.Property(e => e.ImportId).HasColumnName("import_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.ImportPrice)
+                .HasPrecision(10, 2)
+                .HasColumnName("import_price");
+            entity.Property(e => e.Subtotal)
+                .HasPrecision(10, 2)
+                .HasColumnName("subtotal");
+
+            // Thiết lập khóa ngoại
+            entity.HasOne(d => d.ImportReceipt)
+                .WithMany(p => p.ImportDetails)
+                .HasForeignKey(d => d.ImportId)
+                .HasConstraintName("import_details_ibfk_1");
+
+            entity.HasOne(d => d.Product)
+                .WithMany()
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("import_details_ibfk_2");
         });
 
         OnModelCreatingPartial(modelBuilder);

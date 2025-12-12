@@ -1,0 +1,162 @@
+﻿@model ImportReceipt
+
+@{
+    ViewData["Title"] = "Tạo Phiếu Nhập Kho";
+    // Lấy danh sách sản phẩm từ Controller để dùng trong Javascript
+    var products = ViewBag.Products as List<Product>;
+}
+
+<div class="container-fluid">
+    <h2 class="mt-4">Tạo Phiếu Nhập Kho Mới</h2>
+    <hr />
+
+    <form asp-action="Create" method="post" id="importForm">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Thông tin phiếu nhập
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Nhà cung cấp</label>
+                            <select name="SupplierId" class="form-control" asp-items="ViewBag.SupplierId" required>
+                                <option value="">-- Chọn Nhà cung cấp --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Ngày nhập</label>
+                            <input type="text" class="form-control" value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm")" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <span>Danh sách sản phẩm nhập</span>
+                <button type="button" id="btnAddProduct" class="btn btn-success btn-sm">
+                    <i class="fa fa-plus"></i> + Thêm dòng
+                </button>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-bordered table-striped mb-0" id="tblImportDetails">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width: 40%">Sản phẩm</th>
+                            <th style="width: 15%">Số lượng</th>
+                            <th style="width: 20%">Giá nhập</th>
+                            <th style="width: 20%">Thành tiền</th>
+                            <th style="width: 5%">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="item-row">
+                            <td>
+                                <select name="ProductIds[]" class="form-control product-select" required>
+                                    <option value="">-- Chọn sản phẩm --</option>
+                                    @if (products != null)
+                                    {
+                                        foreach (var p in products)
+                                        {
+                                    <option value="@p.ProductId">@p.ProductName</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" name="Quantities[]" class="form-control txtQuantity" value="1" min="1" required />
+                            </td>
+                            <td>
+                                <input type="number" name="ImportPrices[]" class="form-control txtPrice" value="0" min="0" step="1000" required />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control txtSubtotal" value="0" readonly />
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-danger btn-sm btnDelete"><i class="fa fa-trash"></i> X</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-right font-weight-bold">TỔNG CỘNG:</td>
+                            <td>
+                                <input type="text" id="txtGrandTotal" class="form-control font-weight-bold text-danger" value="0" readonly />
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-3 mb-5">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Lưu Phiếu Nhập</button>
+            <a asp-action="Index" class="btn btn-secondary btn-block">Hủy bỏ</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // 1. Hàm tính toán tiền cho từng dòng và tổng cộng
+            function calculateTotal() {
+                var grandTotal = 0;
+
+                $('#tblImportDetails tbody tr').each(function () {
+                    var row = $(this);
+                    var qty = parseFloat(row.find('.txtQuantity').val()) || 0;
+                    var price = parseFloat(row.find('.txtPrice').val()) || 0;
+
+                    var subtotal = qty * price;
+
+                    // Hiển thị thành tiền dòng đó
+                    row.find('.txtSubtotal').val(subtotal.toLocaleString('vi-VN'));
+
+                    grandTotal += subtotal;
+                });
+
+                // Hiển thị tổng tiền phiếu
+                $('#txtGrandTotal').val(grandTotal.toLocaleString('vi-VN') + " VNĐ");
+            }
+
+            // 2. Sự kiện khi thay đổi Số lượng hoặc Giá -> Tính lại tiền
+            $(document).on('input', '.txtQuantity, .txtPrice', function () {
+                calculateTotal();
+            });
+
+            // 3. Sự kiện bấm nút "Thêm dòng"
+            $('#btnAddProduct').click(function () {
+                // Clone dòng đầu tiên
+                var newRow = $('#tblImportDetails tbody tr:first').clone();
+
+                // Reset giá trị các ô input trong dòng mới
+                newRow.find('input').val('');
+                newRow.find('.txtQuantity').val(1);
+                newRow.find('.txtPrice').val(0);
+                newRow.find('.txtSubtotal').val(0);
+
+                // Thêm vào bảng
+                $('#tblImportDetails tbody').append(newRow);
+            });
+
+            // 4. Sự kiện xóa dòng
+            $(document).on('click', '.btnDelete', function () {
+                var rowCount = $('#tblImportDetails tbody tr').length;
+                if (rowCount > 1) {
+                    $(this).closest('tr').remove();
+                    calculateTotal(); // Tính lại tổng sau khi xóa
+                } else {
+                    alert("Không thể xóa dòng cuối cùng!");
+                }
+            });
+
+        });
+    </script>
+}
