@@ -21,13 +21,18 @@ namespace RetailStore.Controllers
         }
 
         // GET: Supplier
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             try
             {
+                ViewData["CurrentSort"] = sortOrder;
+                ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+                ViewData["PhoneSortParm"] = sortOrder == "Phone" ? "phone_desc" : "Phone";
+                ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+                ViewData["AddressSortParm"] = sortOrder == "Address" ? "address_desc" : "Address";
+
                 ViewData["CurrentFilter"] = searchString;
 
-                // Giả định DbContext của bạn có DbSet<Supplier> tên là "Suppliers"
                 var suppliersQuery = _context.Suppliers.AsQueryable();
 
                 if (!String.IsNullOrEmpty(searchString))
@@ -35,8 +40,37 @@ namespace RetailStore.Controllers
                     suppliersQuery = suppliersQuery.Where(s =>
                         s.Name.Contains(searchString) ||
                         s.Phone.Contains(searchString) ||
-                        s.Email.Contains(searchString)
+                        s.Email.Contains(searchString) ||
+                        s.Address.Contains(searchString)
                     );
+                }
+
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        suppliersQuery = suppliersQuery.OrderByDescending(s => s.Name);
+                        break;
+                    case "Phone":
+                        suppliersQuery = suppliersQuery.OrderBy(s => s.Phone);
+                        break;
+                    case "phone_desc":
+                        suppliersQuery = suppliersQuery.OrderByDescending(s => s.Phone);
+                        break;
+                    case "Email":
+                        suppliersQuery = suppliersQuery.OrderBy(s => s.Email);
+                        break;
+                    case "email_desc":
+                        suppliersQuery = suppliersQuery.OrderByDescending(s => s.Email);
+                        break;
+                    case "Address":
+                        suppliersQuery = suppliersQuery.OrderBy(s => s.Address);
+                        break;
+                    case "address_desc":
+                        suppliersQuery = suppliersQuery.OrderByDescending(s => s.Address);
+                        break;
+                    default:
+                        suppliersQuery = suppliersQuery.OrderBy(s => s.Name);
+                        break;
                 }
 
                 var suppliers = await suppliersQuery.ToListAsync();
@@ -76,9 +110,10 @@ namespace RetailStore.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // Bảng 'suppliers' không có cột CreatedAt, nên ta bỏ dòng đó đi
                     _context.Add(supplier);
                     await _context.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = "Thêm nhà cung cấp thành công!";
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -87,6 +122,7 @@ namespace RetailStore.Controllers
             {
                 _logger.LogError(ex, "Lỗi khi tạo nhà cung cấp mới.");
                 ModelState.AddModelError("", "Không thể lưu nhà cung cấp, vui lòng thử lại.");
+                TempData["ErrorMessage"] = "Có lỗi xảy ra, vui lòng thử lại.";  
             }
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -141,6 +177,7 @@ namespace RetailStore.Controllers
 
                     _context.Update(supplierToUpdate);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Sửa nhà cung cấp thành công!";
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -167,19 +204,19 @@ namespace RetailStore.Controllers
         // POST: Supplier/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int SupplierId) // Giữ nguyên mẫu, dù view Index không dùng
+        public async Task<IActionResult> DeleteConfirmed(int SupplierId)
         {
             var supplier = await _context.Suppliers.FindAsync(SupplierId);
             if (supplier != null)
             {
                 _context.Suppliers.Remove(supplier);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Xóa nhà cung cấp thành công!";
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Supplier/DeleteSelected
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteSelected(List<int> selectedIds)
