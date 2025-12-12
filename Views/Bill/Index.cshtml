@@ -1,7 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Hóa đơn";
-    Layout = null;
+
+    Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest"
+        ? null      // Load qua AJAX → không dùng layout
+        : "_Layout"; // Mở trực tiếp → dùng layout
 }
+
 @model IEnumerable<RetailStore.Models.Order>
 
 <div class="col-md-12">
