@@ -370,6 +370,11 @@ input[type="text"] {
     text-align: center;
     padding: 10px;
 }
+    .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        transition: 0.25s;
+    }
 
 .product-img {
     width: 100%;

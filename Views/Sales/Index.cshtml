@@ -134,13 +134,15 @@
                                     <div class="product-info">
                                         <h3>@item.ProductName</h3>
 
-                                        <p class="price">@item.Price.ToString("N0") đồng<span>/ SL: @item.Quantity</span></p>
+                                        <p class="price">@item.Price.ToString("N0") đồng</p>
                                     </div>
                                 </div>
                             }
                         </div>
 
-                        <div class="productnextprev">
+                        <div class="productnextprev" style="
+    margin-left: 7px;
+">
                             <div class="productnext">
                                 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                             </div>
@@ -245,7 +247,7 @@ margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margi
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const products = document.querySelectorAll('.product-card');
-            const perPage = 3; // số sản phẩm hiển thị mỗi lần
+            const perPage = 12; // số sản phẩm hiển thị mỗi lần
             let currentPage = 1;
             const totalPages = Math.ceil(products.length / perPage);
 
