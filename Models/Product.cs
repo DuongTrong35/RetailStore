@@ -45,6 +45,11 @@ namespace RetailStore.Models
         [Column("created_at")]
         public DateTime? CreatedAt { get; set; }
 
+        [StringLength(20)]
+        [Display(Name = "Tình trạng")]
+        [Column("status")]
+        public string status { get; set; } = null!;
+
 
         [Display(Name = "Hình ảnh")]
         [Column("imageUrl")]
