@@ -43,7 +43,8 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Sản phẩm</th>
+                <th>ID Sản phẩm</th>
+                <th>Tên Sản phẩm</th>
                 <th>Giá</th>
                 <th>Số lượng</th>
                 <th>Thành tiền</th>
@@ -54,6 +55,7 @@
             {
                 <tr>
                     <td>@item.ProductId</td>
+                    <td>@item.ProductName</td>
                     <td>@item.Price.ToString("N0") ₫</td>
                     <td>@item.Quantity</td>
                     <td>@item.Subtotal.ToString("N0") ₫</td>
