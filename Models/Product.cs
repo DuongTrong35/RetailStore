@@ -1,23 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RetailStore.Models;
-
-public partial class Product
+namespace RetailStore.Models
 {
-    public int ProductId { get; set; }
+  
+    [Table("products")]
+    public class Product
+    {
+        [Key]
+        [Column("product_id")]
+        public int ProductId { get; set; }
 
-    public int? CategoryId { get; set; }
+        [Column("category_id")]
+        public int? CategoryId { get; set; }
 
-    public int? SupplierId { get; set; }
+        [Column("supplier_id")]
+        public int? SupplierId { get; set; }
 
-    public string ProductName { get; set; } = null!;
+        [Column("product_name")]
+        [Required(ErrorMessage = "Tên sản phẩm là bắt buộc")]
+        [StringLength(100, ErrorMessage = "Tên sản phẩm không quá 100 ký tự")]
+        [Display(Name = "Tên sản phẩm")]
+        public string ProductName { get; set; } = null!;
 
-    public string? Barcode { get; set; }
+        [Column("barcode")]
+        [StringLength(50)]
+        [Display(Name = "Mã vạch")]
+        public string? Barcode { get; set; }
 
-    public decimal Price { get; set; }
+        [Column("price")]
+        [Display(Name = "Giá bán")]
+        [Range(0, 99999999999, ErrorMessage = "Giá phải lớn hơn hoặc bằng 0")]
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
+        public decimal Price { get; set; }
 
-    public string? Unit { get; set; }
+        [Column("unit")]
+        [StringLength(20)]
+        [Display(Name = "Đơn vị tính")]
+        public string? Unit { get; set; } = "pcs";
 
-    public DateTime? CreatedAt { get; set; }
+        [Column("created_at")]
+        [Display(Name = "Ngày tạo")]
+        public DateTime? CreatedAt { get; set; }
+
+       
+        [ForeignKey("CategoryId")]
+        public virtual Category? Category { get; set; }
+
+        [ForeignKey("SupplierId")]
+        public virtual Supplier? Supplier { get; set; }
+    }
 }
