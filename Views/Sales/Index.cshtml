@@ -108,7 +108,9 @@
                                 <i class="fa-solid fa-filter" aria-hidden="true"></i>
                             </div>
                         </div>
-                        <div class="product-container">
+                        <div class="product-container" style="
+    margin-top: 10px;
+">
                             @foreach (var item in Model)
                             {
                                 <div class="product-card"
@@ -136,7 +138,7 @@
                                     <div class="product-info">
                                         <h3>@item.ProductName</h3>
 
-                                        <p class="price">@item.Price.ToString("N0") đồng</p>
+                                        <p class="price" style="color:#D32F2F;">@item.Price.ToString("N0") đồng</p>
                                     </div>
                                 </div>
                             }
