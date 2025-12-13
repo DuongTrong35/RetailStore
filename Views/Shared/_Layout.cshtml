@@ -42,16 +42,15 @@
                     </div>
                     <p>Trang chủ</p>
                 </li>
-                @if (role == 1)
-                {
-                    <li class= "@(currentController == "Product" ? "active" : "")" data-url="/Product/Index">
+                
+                    <li class= "@(currentController == "Products" ? "active" : "")" data-url="/Products/Index">
                         <div class="HomeLeftImg">
                             <img src="~/Icons/ProductIcon.png" alt="" />
                         </div>
                         <p>Quản lý Sản phẩm</p>
                         
                     </li>
-                }
+               
                 @if (role == 1)
                 {
                     <li class="@(currentController == "Staff" ? "active" : "")" data-url="/Staff/Index">
