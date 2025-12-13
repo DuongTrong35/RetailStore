@@ -180,6 +180,7 @@ namespace RetailStore.Controllers
                 {
                     OrderId = order.OrderId,
                     ProductId = item.ProductId,
+                    ProductName = item.ProductName,
                     Quantity = item.Quantity,
                     Price = item.Price,
                     Subtotal = item.Price * item.Quantity

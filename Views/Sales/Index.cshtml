@@ -633,10 +633,14 @@ margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margi
         console.log("product-id:", idCell?.innerText);
         console.log("qty:", qtyCell?.innerText);
         console.log("price:", priceCell?.innerText);
+        let text = row.querySelector(".producttotal").innerText;
+        let cleanText = text.replace(/[^0-9.]/g, '');
+        let price = parseFloat(cleanText);
                 items.push({
                     productId: parseInt(row.querySelector(".productid").innerText),
+                    productName: row.querySelector(".productname").innerText,
                     quantity: parseInt(row.querySelector(".producqty").value),
-                    price: parseFloat(row.querySelector(".producttotal").innerText)
+                    price: parseFloat(price)
                 });
             });
 
