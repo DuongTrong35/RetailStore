@@ -1,8 +1,6 @@
 ﻿@model RetailStore.Models.Product
 
-@{
-    ViewData["Title"] = "Xóa sản phẩm";
-}
+@{ ViewData["Title"] = "Xóa sản phẩm"; }
 
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -16,22 +14,35 @@
                         Bạn có chắc chắn muốn xóa sản phẩm này? Hành động này không thể hoàn tác.
                     </p>
 
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4 text-end">Tên sản phẩm:</dt>
-                        <dd class="col-sm-8 fw-bold fs-5">@Model.ProductName</dd>
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            @if(!string.IsNullOrEmpty(Model.ImageUrl)) {
+                            <img src="@Model.ImageUrl" class="img-thumbnail shadow-sm" style="max-height: 200px;" />
+                            } else {
+                            <div class="alert alert-secondary py-5">Không có ảnh</div>
+                            }
+                        </div>
 
-                        <dt class="col-sm-4 text-end">Mã vạch:</dt>
-                        <dd class="col-sm-8">@(Model.Barcode ?? "Không có")</dd>
+                        <div class="col-md-8">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4 text-end">Tên sản phẩm:</dt>
+                                <dd class="col-sm-8 fw-bold fs-5">@Model.ProductName</dd>
 
-                        <dt class="col-sm-4 text-end">Giá bán:</dt>
-                        <dd class="col-sm-8 text-danger fw-bold">@Model.Price.ToString("N0") VNĐ</dd>
+                                <dt class="col-sm-4 text-end">Mã vạch:</dt>
+                                <dd class="col-sm-8">@(Model.Barcode ?? "Không có")</dd>
 
-                        <dt class="col-sm-4 text-end">Danh mục:</dt>
-                        <dd class="col-sm-8">@(Model.Category?.CategoryName ?? "-")</dd>
+                                <dt class="col-sm-4 text-end">Giá bán:</dt>
+                                <dd class="col-sm-8 text-danger fw-bold">@Model.Price.ToString("N0") VNĐ</dd>
 
-                        <dt class="col-sm-4 text-end">Nhà cung cấp:</dt>
-                        <dd class="col-sm-8">@(Model.Supplier?.Name ?? "-")</dd>
-                    </dl>
+                                <dt class="col-sm-4 text-end">Danh mục:</dt>
+                                <dd class="col-sm-8">@(Model.Category?.CategoryName ?? "-")</dd>
+
+                                <dt class="col-sm-4 text-end">Nhà cung cấp:</dt>
+                                <dd class="col-sm-8">@(Model.Supplier?.Name ?? "-")</dd>
+                            </dl>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="card-footer bg-white d-flex justify-content-end gap-2">
                     <form asp-action="Delete">

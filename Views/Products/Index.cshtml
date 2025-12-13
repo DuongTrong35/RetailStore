@@ -1,9 +1,6 @@
+﻿@model IEnumerable<RetailStore.Models.Product>
 
-@model IEnumerable<RetailStore.Models.Product>
-
-    @{
-    ViewData["Title"] = "Quản lý sản phẩm";
-    }
+    @{ ViewData["Title"] = "Quản lý sản phẩm"; }
 
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -20,25 +17,21 @@
                         <label class="form-label fw-bold">Tìm kiếm</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
-                            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
-                                   class="form-control" placeholder="Nhập tên sản phẩm hoặc mã vạch..." />
+                            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Nhập tên sản phẩm hoặc mã vạch..." />
                         </div>
                     </div>
-
                     <div class="col-md-3">
                         <label class="form-label fw-bold">Danh mục</label>
                         <select name="categoryId" class="form-select" asp-items="ViewBag.CategoryId">
                             <option value="">-- Tất cả danh mục --</option>
                         </select>
                     </div>
-
                     <div class="col-md-3">
                         <label class="form-label fw-bold">Nhà cung cấp</label>
                         <select name="supplierId" class="form-select" asp-items="ViewBag.SupplierId">
                             <option value="">-- Tất cả NCC --</option>
                         </select>
                     </div>
-
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100 fw-bold">
                             <i class="fas fa-filter"></i> Lọc dữ liệu
@@ -53,6 +46,7 @@
                 <table class="table table-hover table-striped mb-0 align-middle">
                     <thead class="table-dark text-nowrap">
                         <tr>
+                            <th style="width: 80px;">Hình ảnh</th>
                             <th>Tên sản phẩm</th>
                             <th>Mã vạch</th>
                             <th>Giá bán</th>
@@ -66,7 +60,7 @@
                         @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted fst-italic">
+                            <td colspan="8" class="text-center py-4 text-muted fst-italic">
                                 <i class="fas fa-search-minus fa-2x mb-2"></i><br />
                                 Không tìm thấy sản phẩm nào phù hợp.
                             </td>
@@ -77,6 +71,13 @@
                         foreach (var item in Model)
                         {
                         <tr>
+                            <td class="text-center">
+                                @if(!string.IsNullOrEmpty(item.ImageUrl)) {
+                                <img src="@item.ImageUrl" class="rounded border" style="width: 50px; height: 50px; object-fit: cover;" alt="Product Img" />
+                                } else {
+                                <i class="fas fa-image text-secondary fa-2x"></i>
+                                }
+                            </td>
                             <td class="fw-bold text-primary">@item.ProductName</td>
                             <td><span class="badge bg-secondary">@item.Barcode</span></td>
                             <td class="text-end text-danger fw-bold">@item.Price.ToString("N0") ₫</td>
