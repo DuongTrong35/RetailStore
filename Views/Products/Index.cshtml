@@ -56,6 +56,7 @@
             <table class="table table-hover table-striped mb-0 align-middle">
                 <thead class="table-dark text-nowrap">
                     <tr>
+                        <th class="text-center" style="width: 80px;">Hình ảnh</th>
                         <th>Tên sản phẩm</th>
                         <th>Mã vạch</th>
                         <th>Giá bán</th>
@@ -80,6 +81,23 @@
                         foreach (var item in Model)
                         {
                             <tr>
+                                <td class="text-center align-middle">
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl"
+                                             alt="Product Img"
+                                             class="rounded border shadow-sm"
+                                             style="width: 50px; height: 50px; object-fit: cover;"
+                                             onerror="this.onerror=null;this.src='/images/null-image.png';" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light rounded border d-flex align-items-center justify-content-center mx-auto"
+                                             style="width: 50px; height: 50px;">
+                                            <i class="fas fa-image text-secondary opacity-50"></i>
+                                        </div>
+                                    }
+                                </td>
                                 <td class="fw-bold text-primary">@item.ProductName</td>
                                 <td><span class="badge bg-secondary">@item.Barcode</span></td>
                                 <td class="text-end text-danger fw-bold">@item.Price.ToString("N0") ₫</td>
@@ -93,6 +111,9 @@
                                         </a>
                                         <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-danger" title="Xóa">
                                             <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                        <a asp-action="Image" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-warning" title="Quản lí ảnh">
+                                            <i class="fa fa-image"></i>
                                         </a>
                                     </div>
                                 </td>

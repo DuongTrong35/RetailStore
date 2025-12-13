@@ -1,20 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RetailStore.Models; 
-
+using RetailStore.Models;
+using System.IO;
 namespace RetailStore.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment; // Dùng để lấy đường dẫn wwwroot
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-  
+
         public async Task<IActionResult> Index(string searchString, int? categoryId, int? supplierId)
         {
          
@@ -150,6 +153,84 @@ namespace RetailStore.Controllers
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ProductId == id);
+        }
+
+        public IActionResult Image(int id)
+        {
+            var product = _context.Products.Find(id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
+        // 2. POST: Xử lý Upload ảnh
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadImage(int id, IFormFile file)
+        {
+            var product = _context.Products.Find(id);
+            if (product == null) return NotFound();
+
+            if (file != null && file.Length > 0)
+            {
+                // Tạo đường dẫn lưu file (wwwroot/images/products)
+                string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "images/products");
+
+                // Kiểm tra xem cái địa chỉ (uploadDir) kia có tồn tại thực tế hay chưa?
+                if (!Directory.Exists(uploadDir))
+                {
+                    // Nếu chưa có -> Thì ra lệnh cho Windows tạo thư mục đó ngay!
+                    Directory.CreateDirectory(uploadDir);
+                }
+
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                string filePath = Path.Combine(uploadDir, fileName);
+
+                if (!string.IsNullOrEmpty(product.ImageUrl))
+                {
+                    string oldPath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
+                }
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                product.ImageUrl = "/images/products/" + fileName;
+                _context.Update(product);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Cập nhật ảnh thành công!";
+            }
+            else
+            {
+                TempData["Error"] = "Vui lòng chọn file ảnh!";
+            }
+
+            return RedirectToAction("Image", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteImage(int id)
+        {
+            var product = _context.Products.Find(id);
+            if (product == null) return NotFound();
+
+            if (!string.IsNullOrEmpty(product.ImageUrl))
+            {
+                // Xóa file vật lý trong wwwroot
+                string oldPath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
+
+                // Xóa đường dẫn trong DB
+                product.ImageUrl = null;
+                _context.Update(product);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Đã xóa ảnh sản phẩm!";
+            }
+
+            return RedirectToAction("Image", new { id = id });
         }
     }
 }

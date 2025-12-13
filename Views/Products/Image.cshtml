@@ -1,0 +1,118 @@
+﻿@model RetailStore.Models.Product
+
+@{
+    ViewData["Title"] = "Quản lý ảnh sản phẩm";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary fw-bold mb-0"><i class="fa-regular fa-image"></i> Quản lý hình ảnh</h2>
+            <p class="text-muted mb-0">Sản phẩm: <span class="fw-bold text-dark">@Model.ProductName</span> (Mã: @Model.Barcode)</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light fw-bold">
+                    <i class="fas fa-eye text-info"></i> Ảnh hiện tại
+                </div>
+                <div class="card-body d-flex flex-column align-items-center justify-content-center bg-white">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="position-relative border rounded p-2 mb-3">
+                            <img src="@Model.ImageUrl" alt="@Model.ProductName" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;">
+                        </div>
+
+                        <form asp-action="DeleteImage" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa ảnh này không?');">
+                            <input type="hidden" name="id" value="@Model.ProductId" />
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Xóa ảnh này
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-image fa-4x mb-3 text-secondary opacity-50"></i>
+                            <p>Sản phẩm này chưa có hình ảnh.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white fw-bold">
+                    <i class="fas fa-cloud-upload-alt"></i> Cập nhật ảnh mới
+                </div>
+                <div class="card-body">
+                    <form asp-action="UploadImage" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="@Model.ProductId" />
+
+                        <div class="mb-4">
+                            <label for="fileUpload" class="form-label fw-bold">Chọn file ảnh</label>
+                            <input type="file" name="file" id="fileUpload" class="form-control" accept="image/*" onchange="previewImage(this)">
+                            <div class="form-text">Chấp nhận các định dạng: .jpg, .jpeg, .png, .gif</div>
+                        </div>
+
+                        <div id="previewContainer" class="text-center d-none mb-3 p-3 bg-light rounded border border-dashed">
+                            <p class="small text-muted mb-2">Xem trước ảnh mới:</p>
+                            <img id="imgPreview" src="#" alt="Preview" class="img-fluid rounded shadow-sm" style="max-height: 200px;" />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary fw-bold">
+                                <i class="fas fa-save"></i> Lưu thay đổi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Hàm JavaScript đơn giản để xem trước ảnh khi chọn file
+        function previewImage(input) {
+            var container = document.getElementById('previewContainer');
+            var preview = document.getElementById('imgPreview');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    container.classList.remove('d-none'); // Hiện khung preview
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = '#';
+                container.classList.add('d-none'); // Ẩn khung preview
+            }
+        }
+    </script>
+}

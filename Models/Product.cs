@@ -44,6 +44,9 @@ namespace RetailStore.Models
         [Display(Name = "Ngày tạo")]
         public DateTime? CreatedAt { get; set; }
 
+        [Column("imageUrl")]
+        public string? ImageUrl { get; set; }
+
 
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
