@@ -2,10 +2,6 @@
 
 @{
     ViewData["Title"] = "Quản lý sản phẩm";
-    if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-    {
-        Layout = null;
-    }
 }
 
 <div class="container-fluid py-4">
@@ -23,25 +19,21 @@
                     <label class="form-label fw-bold">Tìm kiếm</label>
                     <div class="input-group">
                         <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
-                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
-                               class="form-control" placeholder="Nhập tên sản phẩm hoặc mã vạch..." />
+                        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Nhập tên sản phẩm hoặc mã vạch..." />
                     </div>
                 </div>
-
                 <div class="col-md-3">
                     <label class="form-label fw-bold">Danh mục</label>
                     <select name="categoryId" class="form-select" asp-items="ViewBag.CategoryId">
                         <option value="">-- Tất cả danh mục --</option>
                     </select>
                 </div>
-
                 <div class="col-md-3">
                     <label class="form-label fw-bold">Nhà cung cấp</label>
                     <select name="supplierId" class="form-select" asp-items="ViewBag.SupplierId">
                         <option value="">-- Tất cả NCC --</option>
                     </select>
                 </div>
-
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100 fw-bold">
                         <i class="fas fa-filter"></i> Lọc dữ liệu
@@ -56,7 +48,7 @@
             <table class="table table-hover table-striped mb-0 align-middle">
                 <thead class="table-dark text-nowrap">
                     <tr>
-                        <th class="text-center" style="width: 80px;">Hình ảnh</th>
+                        <th style="width: 80px;">Hình ảnh</th>
                         <th>Tên sản phẩm</th>
                         <th>Mã vạch</th>
                         <th>Giá bán</th>
@@ -70,7 +62,7 @@
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted fst-italic">
+                            <td colspan="8" class="text-center py-4 text-muted fst-italic">
                                 <i class="fas fa-search-minus fa-2x mb-2"></i><br />
                                 Không tìm thấy sản phẩm nào phù hợp.
                             </td>
@@ -81,21 +73,14 @@
                         foreach (var item in Model)
                         {
                             <tr>
-                                <td class="text-center align-middle">
+                                <td class="text-center">
                                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                                     {
-                                        <img src="@item.ImageUrl"
-                                             alt="Product Img"
-                                             class="rounded border shadow-sm"
-                                             style="width: 50px; height: 50px; object-fit: cover;"
-                                             onerror="this.onerror=null;this.src='/images/null-image.png';" />
+                                        <img src="@item.ImageUrl" class="rounded border" style="width: 50px; height: 50px; object-fit: cover;" alt="Product Img" />
                                     }
                                     else
                                     {
-                                        <div class="bg-light rounded border d-flex align-items-center justify-content-center mx-auto"
-                                             style="width: 50px; height: 50px;">
-                                            <i class="fas fa-image text-secondary opacity-50"></i>
-                                        </div>
+                                        <i class="fas fa-image text-secondary fa-2x"></i>
                                     }
                                 </td>
                                 <td class="fw-bold text-primary">@item.ProductName</td>
@@ -111,9 +96,6 @@
                                         </a>
                                         <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-danger" title="Xóa">
                                             <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                        <a asp-action="Image" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-warning" title="Quản lí ảnh">
-                                            <i class="fa fa-image"></i>
                                         </a>
                                     </div>
                                 </td>
