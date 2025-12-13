@@ -1,0 +1,703 @@
+﻿* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.homecontainer {
+    height: 600px;
+    width: 100%;
+    background-color: red;
+}
+
+    .homecontainer .homecontainercover {
+        height: 600px;
+        width: 100%;
+        display: flex;
+    }
+
+        .homecontainer .homecontainercover .homeleft .homeleftbanner {
+            height: 50px;
+            background: #1a73e8;
+            display: flex;
+            align-items: center;
+            /* justify-content: space-between; */
+            /* padding: 10px 20px; */
+        }
+
+        .homecontainer .homecontainercover .homeleft {
+            width: 75%;
+            background: white;
+        }
+
+        .homecontainer .homecontainercover .homeright {
+            width: 25%;
+            background: goldenrod;
+            height: 729px;
+        }
+
+        .homecontainer .homecontainercover .homeleft .homeleftbanner .bannerfind {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+            .homecontainer .homecontainercover .homeleft .homeleftbanner .bannerfind i {
+                position: absolute;
+                left: 10px;
+                color: #888;
+            }
+
+            .homecontainer .homecontainercover .homeleft .homeleftbanner .bannerfind input {
+                width: 380px;
+                padding: 8px 10px 8px 32px; /* chừa khoảng trống bên trái cho icon */
+                border: none;
+                border-radius: 4px;
+            }
+
+.search-results {
+    position: fixed;
+    top: 100px; /* vị trí từ trên xuống */
+    left: 20px; /* vị trí từ trái qua */
+    width: 500px; /* chiều rộng */
+    max-height: 400px;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    overflow-y: auto;
+    display: none;
+    z-index: 9999;
+    border-radius: 8px;
+    padding: 8px 0;
+}
+
+.search-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+    .search-item:last-child {
+        border-bottom: none;
+    }
+
+    .search-item:hover {
+        background-color: #f5f5f5;
+    }
+/* Thanh chia giữa hai vùng */
+#splitter {
+    height: 8px;
+    background: #ccc;
+    cursor: row-resize;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    /* 3 sọc đen giữa thanh chia */
+    #splitter::before {
+        content: "";
+        width: 30px;
+        height: 4px;
+        background: repeating-linear-gradient( to right, #666, #666 4px, transparent 4px, transparent 8px );
+        border-radius: 2px;
+    }
+/* ---------------------------------------------------------------- */
+.bannertabs {
+    width: 100%;
+    margin-top: 22px;
+    margin-left: 10px;
+    display: flex;
+}
+
+.invoicetab {
+    width: 103px;
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.closebtn {
+    background: transparent;
+    border: none;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+    .closebtn i {
+        font-size: 14px;
+    }
+
+.plusbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+    transition: 0.2s;
+    margin-left: 5px;
+}
+
+    .plusbtn:hover {
+        color: #0056b3; /* xanh đậm hơn khi hover */
+        transform: scale(1.15);
+    }
+
+    .plusbtn i {
+        font-size: 18px;
+    }
+/* ------------------------------------------------------------- */
+.maincontainer {
+    display: flex;
+    flex-direction: column;
+    height: 93vh;
+    overflow: hidden;
+}
+
+.productsell {
+    width: 100%;
+    height: 240px;
+    background: white;
+    /*    max-height: 300px;*/
+    max-height: 90vh; /* vẫn giới hạn không quá to */
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+    .productsell table tbody tr {
+        text-align: center;
+    }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 20px;
+}
+
+th {
+    background: #f1f5f9;
+    text-align: center;
+    padding: 10px 8px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+td {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Input và select */
+input[type="number"],
+input[type="text"] {
+    width: 80px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px 6px;
+    text-align: right;
+}
+
+    input[type="number"]::-webkit-inner-spin-button {
+        opacity: 1;
+    }
+
+/* Cột tên sản phẩm */
+.productname {
+    gap: 5px;
+}
+
+    .productname i {
+        color: #007bff;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+/* Nút tăng giảm */
+.qty-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+    .qty-control button {
+        background: #f1f5f9;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 22px;
+        height: 22px;
+        line-height: 20px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .qty-control input {
+        width: 40px;
+        text-align: center;
+    }
+
+/* Nút xóa */
+.delete-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+    .delete-btn:hover {
+        color: #e74c3c;
+    }
+
+/* Dòng thêm dịch vụ */
+.add-service {
+    text-align: center;
+    padding: 10px;
+    color: #007bff;
+    font-weight: 500;
+    cursor: pointer;
+    background: white;
+}
+
+    .add-service:hover {
+        text-decoration: underline;
+    }
+/* ------------------------------------------------------------------------- */
+.productcontainercover {
+    /* margin-top: 10px; */
+    width: 100%;
+    display: flex;
+}
+
+.productsetting {
+    color: #007bff;
+    background-color: #fff; /* Màu nền trắng */
+    border-right: 1px solid #ccc; /* <-- Viền phải màu xám */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Đổ bóng mềm */
+    width: 2%;
+}
+
+    .productsetting .cardfagear {
+        width: 100%;
+        border-bottom: 2px solid #ccc; /* Viền dưới màu xám */
+        height: 30px;
+    }
+
+    .productsetting .cardfilter {
+        width: 100%;
+        height: 30px;
+        border-bottom: 2px solid #ccc; /* Viền dưới màu xám */
+    }
+
+    .productsetting .cardfagear i {
+        margin-left: 3px;
+        margin-top: 8px;
+    }
+
+    .productsetting .cardfilter i {
+        margin-left: 3px;
+        margin-top: 8px;
+    }
+
+.productnextprev {
+    width: 4%;
+}
+
+    .productnextprev .productnext {
+        width: 100%;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        background: blue;
+        cursor: pointer;
+    }
+
+    .productnextprev .productprev {
+        width: 100%;
+        height: 30px;
+        margin-top: 8px;
+        display: flex;
+        justify-content: center;
+        background: blue;
+        cursor: pointer;
+    }
+
+    .productnextprev .productnext i {
+        margin-top: 6px;
+    }
+
+    .productnextprev .productprev i {
+        margin-top: 6px;
+    }
+
+.product-container {
+    margin-left: 10px;
+    width: 94%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    background: white;
+}
+
+.product-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    width: 160px;
+    text-align: center;
+    padding: 10px;
+}
+
+.product-img {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+    .product-img img {
+        width: 100%;
+        height: 100%;
+    }
+
+.product-info h3 {
+    font-size: 14px;
+    color: #333;
+    margin: 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-info .code {
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+}
+
+.product-info .price {
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+    .product-info .price span {
+        color: #666;
+        font-weight: normal;
+    }
+/*    ----------------------------- Tìm kiếm ---------------------------------------*/
+.search-results {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 90vh;
+    /*    background: red;*/
+    position: fixed;
+    z-index: 9982;
+    top: 41px;
+    left: 20px;
+    width: 405px;
+    height: 400px;
+    padding: 0;
+}
+
+.searchitem {
+    display: flex;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin-top: 5px;
+}
+
+    .searchitem .searchitemcenter {
+        width: 170px;
+        font-size: 18px;
+    }
+
+        .searchitem .searchitemcenter p {
+            margin-left: 10px;
+        }
+
+    .searchitem .searchitemleft {
+        width: 55px;
+        height: 50px;
+        border-right: 3px solid black;
+        padding-right: 10px;
+        /* margin-right: 10px;   */
+    }
+
+        .searchitem .searchitemleft img {
+            width: 50px;
+            height: 50px;
+        }
+
+    .searchitem .searchitemright {
+        width: 180px;
+        text-align: right;
+        font-size: 18px;
+    }
+
+        .searchitem .searchitemright p {
+            margin-right: 10px;
+        }
+
+.homeright .homerightbanner {
+    height: 88px;
+    background: antiquewhite;
+    display: flex;
+}
+
+    .homeright .homerightbanner img {
+        width: 60px;
+        height: 60px;
+        margin-top: 10px;
+        margin-left: 5px;
+    }
+
+    .homeright .homerightbanner .qualityproduct {
+        display: block;
+        margin-left: 10px;
+        margin-right: 10px;
+        width: 72px;
+        margin-top: 10px;
+    }
+
+        .homeright .homerightbanner .qualityproduct p {
+            font-size: 18px;
+        }
+
+        .homeright .homerightbanner .qualityproduct span {
+            font-size: 30px;
+            margin-left: 14px;
+        }
+
+    .homeright .homerightbanner .sumproduct {
+        display: block;
+        width: 223px;
+        text-align: right;
+        margin-top: 10px;
+    }
+
+    .homeright .homerightbanner p {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .homeright .homerightbanner span {
+        font-size: 30px;
+        margin-right: 5px;
+    }
+
+.homeright .homerightbannercustomer .homerightbannercustomer {
+    display: block;
+    text-align: center;
+    width: 320px;
+}
+
+    .homeright .homerightbannercustomer .homerightbannercustomer p {
+        margin-top: 10px;
+        font-size: 18px;
+    }
+
+    .homeright .homerightbannercustomer .homerightbannercustomer span {
+        display: block;
+        font-size: 30px;
+    }
+
+.homeright .homerightbannercustomer {
+    height: 88px;
+    background: aquamarine;
+    display: flex;
+}
+
+    .homeright .homerightbannercustomer img {
+        margin-top: 10px;
+        margin-left: 5px;
+        width: 60px;
+        height: 60px;
+    }
+/* --- */
+.homeright .homerightbannerseecustomer .homerighseecustomerleft {
+    display: block;
+    text-align: center;
+    width: 320px;
+    margin-top: 25px;
+}
+
+    .homeright .homerightbannerseecustomer .homerighseecustomerleft p {
+        /*        margin-top: 10px;*/
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+.homeright .homerightbannerseecustomer .homerighcustomerbill span {
+    display: block;
+    font-size: 20px;
+}
+
+.homeright .homerightbannerseecustomer {
+    height: 120px;
+    background: aquamarine;
+    display: flex;
+}
+
+    .homeright .homerightbannerseecustomer img {
+        /*        margin-top: 10px;
+        margin-left: 5px;*/
+        width: 60px;
+        height: 60px;
+    }
+
+    .homeright .homerightbannerseecustomer .homerighseecustomeright {
+        margin-top: 15px;
+        display: block;
+    }
+/*    ----------------------------------------------------*/
+.homeright .homerightbannercustomerbill .homerighcustomerbill {
+    display: block;
+    text-align: center;
+    width: 320px;
+}
+
+    .homeright .homerightbannercustomerbill .homerighcustomerbill p {
+        margin-top: 10px;
+        font-size: 18px;
+    }
+
+    .homeright .homerightbannercustomerbill .homerighcustomerbill span {
+        display: block;
+        font-size: 30px;
+    }
+
+.homeright .homerightbannercustomerbill {
+    height: 88px;
+    background: darksalmon;
+    display: flex;
+}
+
+    .homeright .homerightbannercustomerbill img {
+        margin-top: 10px;
+        margin-left: 5px;
+        width: 60px;
+        height: 60px;
+    }
+
+
+
+
+/*--------------------------------------------*/
+.homeright .homerightbannercustomerpoint .homerightcustomerpoint {
+    display: block;
+    text-align: center;
+    width: 320px;
+}
+
+    .homeright .homerightbannercustomerpoint .homerightcustomerpoint p {
+        margin-top: 10px;
+        font-size: 18px;
+    }
+
+    .homeright .homerightbannercustomerpoint .homerightcustomerpoint span {
+        display: block;
+        font-size: 30px;
+    }
+
+.homeright .homerightbannercustomerpoint {
+    height: 88px;
+    background: azure;
+    display: flex;
+}
+
+    .homeright .homerightbannercustomerpoint img {
+        margin-top: 10px;
+        margin-left: 5px;
+        width: 60px;
+        height: 60px;
+    }
+/*    ----------------------------*/
+.homeright .homerightbannercustomerpromotion .homerighcustomerpromotion {
+    display: block;
+    text-align: center;
+    width: 320px;
+}
+
+    .homeright .homerightbannercustomerpromotion .homerighcustomerpromotion p {
+        margin-top: 10px;
+        font-size: 18px;
+    }
+
+    .homeright .homerightbannercustomerpromotion .homerighcustomerpromotion span {
+        display: block;
+        font-size: 30px;
+    }
+
+.homeright .homerightbannercustomerpromotion {
+    height: 88px;
+    background: bottom;
+    display: flex;
+}
+
+    .homeright .homerightbannercustomerpromotion img {
+        margin-top: 10px;
+        margin-left: 5px;
+        width: 60px;
+        height: 60px;
+    }
+
+.logout-section {
+    padding: 20px;
+    border-top: 1px solid #dee2e6;
+    background-color: antiquewhite;
+}
+
+.btnthanhtoan {
+    width: 100%;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+    .btnthanhtoan:hover {
+        background-color: #c82333;
+    }
+
+.btntaokh {
+    width: 100%;
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+    .btntaokh:hover {
+        background-color: #c82333;
+    }
