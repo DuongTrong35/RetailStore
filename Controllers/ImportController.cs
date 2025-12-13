@@ -66,7 +66,9 @@ namespace RetailStore.Controllers
         public IActionResult Create()
         {
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name");
-            ViewBag.Products = _context.Products.ToList();
+            ViewBag.Products = _context.Products
+                .Where(p => p.status != "deleted")
+                .ToList();
             return View();
         }
 
