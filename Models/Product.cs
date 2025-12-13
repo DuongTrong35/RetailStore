@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,15 +40,5 @@ namespace RetailStore.Models
         [Display(Name = "Đơn vị tính")]
         public string? Unit { get; set; } = "pcs";
 
-        [Column("created_at")]
-        [Display(Name = "Ngày tạo")]
-        public DateTime? CreatedAt { get; set; }
-
-       
-        [ForeignKey("CategoryId")]
-        public virtual Category? Category { get; set; }
-
-        [ForeignKey("SupplierId")]
-        public virtual Supplier? Supplier { get; set; }
-    }
+    public DateTime? CreatedAt { get; set; }
 }

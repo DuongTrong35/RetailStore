@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RetailStore.Models
@@ -27,9 +27,5 @@ namespace RetailStore.Models
         [Display(Name = "Email")]
         public string? Email { get; set; }
 
-        [Column("address")]
-        [Display(Name = "Địa chỉ")]
-        public string? Address { get; set; } 
-
-    }
+    public string? Address { get; set; }
 }
