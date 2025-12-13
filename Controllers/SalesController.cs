@@ -27,7 +27,7 @@ namespace RetailStore.Controllers
                                ProductName = p.ProductName,
                                Price = p.Price,
                                CategoryId = (int)p.CategoryId,
-                               image = p.ImageUrl,
+                               image = p.ImageUrl ?? "/images/products/null-image.png",
                                Quantity = inv.Quantity ?? 0,
                                unit = p.Unit
                            };

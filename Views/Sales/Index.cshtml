@@ -129,7 +129,7 @@
                                         </div>
                                     } *@
                                     <div class="product-img">
-                                        <img src="@Url.Content("~/Image/product/" + item.image)" alt="@item.ProductName" />
+                                        <img src="@Url.Content(item.image)" alt="@item.ProductName" />
                                     </div>
                                     <div class="product-info">
                                         <h3>@item.ProductName</h3>
@@ -154,7 +154,7 @@
             </div>
             <div class="homeright">
                 <div class="homerightbanner">
-                    <img src="~/Image/Free/produc.png" alt="alo" />
+                    <img src="~/Images/Free/produc.png" alt="alo" />
                     <div class="qualityproduct">
                         <p>Số lượng:</p>
                         <span>0</span>
@@ -166,7 +166,7 @@
                 </div>
 
                 <div class="homerightbannercustomerpoint">
-                    <img src="~/Image/Free/point.png" alt="alo" />
+                    <img src="~/Images/Free/point.png" alt="alo" />
                     <div class="homerightcustomerpoint">
                         <p>Điểm tích lũy</p>
                         <span id="customerpoint" class="customerpoint">0</span>
@@ -174,7 +174,7 @@
                 </div>
 
                 <div class="homerightbannercustomerpromotion">
-                    <img src="~/Image/Free/giamgia.png" alt="alo" />
+                    <img src="~/Images/Free/giamgia.png" alt="alo" />
                     <div class="homerighcustomerpromotion">
                         <p>Nhập mã giảm giá</p>
                         <input type="text" id="promocustomer" class="promocustomerr" placeholder="Nhập mã giảm giá" style="height: 40px;width: 196px;padding: 8px 10px 8px 32px;border: none;border-radius: 4px;direction: ltr;text-align: left;font-size:18px">
@@ -195,7 +195,7 @@ cursor:pointer;
                 </div>
 
                 <div class="homerightbannercustomer">
-                    <img src="~/Image/Free/money.png" alt="alo" />
+                    <img src="~/Images/Free/money.png" alt="alo" />
                     <div class="homerightbannercustomer">
                         <p>Khách hàng đã trả</p>
                         <input type="text" id="moneycustommerpay" class="moneycustommerpay" placeholder="Nhập số tiền khách hàng" style="height: 40px;width: 276px;padding: 8px 10px 8px 32px;border: none;border-radius: 4px;direction: ltr;text-align: left;font-size:18px">
@@ -204,7 +204,7 @@ cursor:pointer;
                 </div>
 
                 <div class="homerightbannercustomerbill">
-                    <img src="~/Image/Free/thoilai.png" alt="alo" />
+                    <img src="~/Images/Free/thoilai.png" alt="alo" />
                     <div class="homerighcustomerbill">
                         <p>Thối lại</p>
                         <span id="customermoney" class="customermoney">0</span>
@@ -435,7 +435,7 @@ margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margi
             ========================================================================= */
             const searchInput = document.getElementById("searchInput");
             const searchResults = document.getElementById("searchResults");
-        const imageBaseUrl = '@Url.Content("~/Image/product")';
+        const imageBaseUrl = '@Url.Content("~/Images/products")';
                     searchInput.oninput = () => {
                 let text = searchInput.value.trim();
                 if (text.length < 1) return searchResults.style.display = "none";
@@ -456,7 +456,7 @@ margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margi
 
                             div.innerHTML = `
                                 <div class="searchitemleft">
-        <img src="/Image/product/${p.imageUrl}">
+        <img src="${p.imageUrl}">
                                 </div>
                                 <div class="searchitemcenter">
                                     <p>Mã: ${p.productId}</p>
