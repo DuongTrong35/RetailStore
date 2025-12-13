@@ -90,14 +90,23 @@
                                 <td>@(item.Category?.CategoryName ?? "-")</td>
                                 <td>@(item.Supplier?.Name ?? "-")</td>
                                 <td class="text-center">
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-warning" title="Sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-danger" title="Xóa">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </div>
+
+                                    @if (item.status.Equals("deleted", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <p class="fst-italic text-danger">Đã xóa</p>
+                                    }
+                                    else
+                                    {
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-warning" title="Sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                    
                                 </td>
                             </tr>
                         }
