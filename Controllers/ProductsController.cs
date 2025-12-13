@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RetailStore.Models; 
@@ -14,52 +14,50 @@ namespace RetailStore.Controllers
             _context = context;
         }
 
-  
+
         public async Task<IActionResult> Index(string searchString, int? categoryId, int? supplierId)
         {
-         
             var products = _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Supplier)
                 .AsQueryable();
 
-          
+
             if (!string.IsNullOrEmpty(searchString))
             {
                 products = products.Where(p => p.ProductName.Contains(searchString) ||
                                                (p.Barcode != null && p.Barcode.Contains(searchString)));
             }
 
-           
             if (categoryId.HasValue)
             {
                 products = products.Where(p => p.CategoryId == categoryId);
             }
 
-     
             if (supplierId.HasValue)
             {
                 products = products.Where(p => p.SupplierId == supplierId);
             }
 
-  
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", categoryId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", supplierId);
-
             ViewData["CurrentFilter"] = searchString;
 
-            return View(await products.OrderByDescending(p => p.ProductId).ToListAsync());
+            var result = await products.OrderByDescending(p => p.ProductId).ToListAsync();
+
+        
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                // Nếu là AJAX, chỉ trả về nội dung (không có Header/Footer/Menu)
+                return PartialView(result);
+            }
+            // --------------------------------------
+
+            // Nếu truy cập trực tiếp bằng URL, trả về full trang
+            return View(result);
         }
 
 
-        public IActionResult Create()
-        {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name");
-            return View();
-        }
-
-       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,ProductName,Barcode,Price,Unit,CategoryId,SupplierId")] Product product)
