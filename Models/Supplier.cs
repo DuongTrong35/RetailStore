@@ -27,5 +27,9 @@ namespace RetailStore.Models
         [Display(Name = "Email")]
         public string? Email { get; set; }
 
-    public string? Address { get; set; }
+        [Column("address")]
+        [Display(Name = "Địa chỉ")]
+        public string? Address { get; set; }
+
+    }
 }

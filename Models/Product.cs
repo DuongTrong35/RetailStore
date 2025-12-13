@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RetailStore.Models
 {
-  
+
     [Table("products")]
     public class Product
     {
@@ -40,5 +40,15 @@ namespace RetailStore.Models
         [Display(Name = "Đơn vị tính")]
         public string? Unit { get; set; } = "pcs";
 
-    public DateTime? CreatedAt { get; set; }
+        [Column("created_at")]
+        [Display(Name = "Ngày tạo")]
+        public DateTime? CreatedAt { get; set; }
+
+
+        [ForeignKey("CategoryId")]
+        public virtual Category? Category { get; set; }
+
+        [ForeignKey("SupplierId")]
+        public virtual Supplier? Supplier { get; set; }
+    }
 }
