@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using QuestPDF.Fluent;
 using RetailStore.Models;
 using System.Linq;
 
@@ -222,6 +224,20 @@ namespace RetailStore.Controllers
             });
         }
 
+        [HttpGet]
+        public IActionResult InvoicePdf(int id)
+        {
+            var order = _context.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefault(o => o.OrderId == id);
 
+            if (order == null)
+                return NotFound();
+
+            var document = new InvoiceDocument(order);
+            var pdf = document.GeneratePdf();
+
+            return File(pdf, "application/pdf", $"HoaDon_{id}.pdf");
+        }
     }
 }
