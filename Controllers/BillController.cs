@@ -27,13 +27,13 @@ namespace RetailStore.Controllers
                 orders = orders.Where(o => o.OrderId.ToString().Contains(searchString));
             }
 
-            // Lọc từ ngày
+            //  Lọc từ ngày
             if (dateFrom.HasValue)
             {
                 orders = orders.Where(o => o.OrderDate >= dateFrom.Value);
             }
 
-            // Lọc đến ngày
+            //  Lọc đến ngày
             if (dateTo.HasValue)
             {
                 var dt = dateTo.Value.Date.AddDays(1).AddSeconds(-1);
@@ -62,27 +62,8 @@ namespace RetailStore.Controllers
                 .Include(o => o.Payments)
                 .FirstOrDefault(o => o.OrderId == id);
 
-            if (order == null) return NotFound();
-
-            var productIds = order.OrderItems.Select(i => i.ProductId).ToList();
-
-            var products = _context.Products
-                .Where(p => productIds.Contains(p.ProductId))
-                .ToList();
-
-            foreach (var item in order.OrderItems)
-            {
-                var productInfo = products.FirstOrDefault(p => p.ProductId == item.ProductId);
-
-                if (productInfo != null)
-                {
-                    item.ProductName = productInfo.ProductName; // Gán tên
-                }
-                else
-                {
-                    item.ProductName = "Sản phẩm đã bị xóa"; 
-                }
-            }
+            if (order == null)
+                return NotFound();
 
             return View(order);
         }

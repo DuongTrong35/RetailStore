@@ -14,8 +14,6 @@
         <i class="bi bi-arrow-left"></i> Quay lại
     </button>
 
-
-
     <hr />
 
     <h5>Thông tin hóa đơn</h5>
@@ -45,8 +43,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID Sản phẩm</th>
-                <th>Tên Sản phẩm</th>
+                <th>Sản phẩm</th>
                 <th>Giá</th>
                 <th>Số lượng</th>
                 <th>Thành tiền</th>
@@ -57,7 +54,6 @@
             {
                 <tr>
                     <td>@item.ProductId</td>
-                    <td>@item.ProductName</td>
                     <td>@item.Price.ToString("N0") ₫</td>
                     <td>@item.Quantity</td>
                     <td>@item.Subtotal.ToString("N0") ₫</td>

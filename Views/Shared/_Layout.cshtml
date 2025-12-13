@@ -5,6 +5,7 @@
     var namerole = Context.Session.GetString("NameRole");
     var nameshort = Context.Session.GetString("ShortName");
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var nhanvid = Context.Session.GetInt32("nvid");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -86,6 +87,15 @@
                         <img src="~/Icons/invoice.png" alt="" />
                     </div>
                     <p>Hóa đơn</p>
+                </li>
+                <li class="salesbill">
+                    <a href="/Sales/Index" style="width:100%; display:flex; list-style:none;text-decoration:none;color:black">
+
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/supplier.png" alt="" />
+                        </div>
+                        <p>Thanh toán hàng</p>
+                    </a>
                 </li>
                 <li class="@(currentController == "Promotion" ? "active" : "")" data-url="/Promotion/Index">
                     <div class="HomeLeftImg">

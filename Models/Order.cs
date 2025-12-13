@@ -20,6 +20,7 @@ public partial class Order
     public decimal? TotalAmount { get; set; }
 
     public decimal? DiscountAmount { get; set; }
+
     public virtual ICollection<OrderItem> OrderItems { get; set; }
     public virtual ICollection<Payment> Payments { get; set; }
 }

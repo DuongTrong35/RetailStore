@@ -1,0 +1,697 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    var nvid = Context.Session.GetInt32("nvid");
+
+}
+@* @model IEnumerable<RetailStore.Models.Product> *@
+@model IEnumerable<RetailStore.Models.ProductInventory>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/Sales.css" />
+    <link rel="stylesheet" href="~/css/Sales.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+    <div id="toast"
+         style="
+         position: fixed;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         background: rgba(0,0,0,0.85);
+         color: #fff;
+         padding: 16px 24px;
+         border-radius: 10px;
+         font-size: 18px;
+         text-align: center;
+         opacity: 0;
+         pointer-events: none;
+         transition: opacity 0.4s ease;
+         z-index: 9999;
+     ">
+    </div>
+
+    <div class="homecontainer">
+        <div class="homecontainercover">
+            <div id="searchResults" class="search-results"></div>
+
+            <div class="homeleft">
+                <div class="homeleftbanner">
+
+                    <div class="bannerfind">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Tìm hàng hóa (F3)" style="direction: ltr; text-align: left;" id="searchInput">
+                    </div>
+                    <a href="@Url.Action("Index", "Home")"
+                       style="
+       display: inline-flex;
+       align-items: center;
+       gap: 8px;
+       padding: 10px 18px;
+       background: lightblue;
+       color: black;
+       text-decoration: none;
+       border-radius: 25px;
+       font-size: 15px;
+       font-weight: 500;
+       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+       transition: all 0.25s ease;
+       margin-left:600px;
+   ">
+                        <i class="bi bi-arrow-left"></i>
+                        Quay lại
+                    </a>
+
+
+
+                </div>
+                <div class="maincontainer">
+
+                    <div class="productsell">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã hàng</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Đơn vị</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Thành tiền</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="cartTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    @* <div class="add-service">+ Thêm dịch vụ (F9)</div> *@
+                    <div id="splitter"></div>
+
+                    <div class="productcontainercover">
+                        <div class="productsetting" style="
+    display: none;
+">
+                            <div class="cardfagear">
+                                <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                            </div>
+                            <div class="cardfilter">
+                                <i class="fa-solid fa-filter" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="product-container">
+                            @foreach (var item in Model)
+                            {
+                                <div class="product-card"
+                                     @* data-barcode="@item.Barcode" *@
+                                     data-product-id="@item.ProductId"
+                                     data-name="@item.ProductName"
+                                     data-price="@item.Price"
+                                     data-unit="@item.unit">
+                                    @*     @if (@item.CategoryId == 1){
+                                <div class="product-img">
+                                            <img src="@Url.Content("~/Image/product/drinks/" + item.image)" alt="@item.ProductName" />
+                                        </div>
+                                    }
+                                    else if (@item.CategoryId == 2)
+                                    {
+                                        <div class="product-img">
+                                            <img src="@Url.Content("~/Image/product/snackcandy/" + item.image)" alt="@item.ProductName" />
+                                        </div>
+                                    } *@
+                                    <div class="product-img">
+                                        <img src="@Url.Content("~/Image/product/" + item.image)" alt="@item.ProductName" />
+                                    </div>
+                                    <div class="product-info">
+                                        <h3>@item.ProductName</h3>
+
+                                        <p class="price">@item.Price.ToString("N0") đồng<span>/ SL: @item.Quantity</span></p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="productnextprev">
+                            <div class="productnext">
+                                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                            </div>
+                            <div class="productprev">
+                                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="homeright">
+                <div class="homerightbanner">
+                    <img src="~/Image/Free/produc.png" alt="alo" />
+                    <div class="qualityproduct">
+                        <p>Số lượng:</p>
+                        <span>0</span>
+                    </div>
+                    <div class="sumproduct">
+                        <p>Tổng</p>
+                        <span>0</span>
+                    </div>
+                </div>
+
+                <div class="homerightbannercustomerpoint">
+                    <img src="~/Image/Free/point.png" alt="alo" />
+                    <div class="homerightcustomerpoint">
+                        <p>Điểm tích lũy</p>
+                        <span id="customerpoint" class="customerpoint">0</span>
+                    </div>
+                </div>
+
+                <div class="homerightbannercustomerpromotion">
+                    <img src="~/Image/Free/giamgia.png" alt="alo" />
+                    <div class="homerighcustomerpromotion">
+                        <p>Nhập mã giảm giá</p>
+                        <input type="text" id="promocustomer" class="promocustomerr" placeholder="Nhập mã giảm giá" style="height: 40px;width: 196px;padding: 8px 10px 8px 32px;border: none;border-radius: 4px;direction: ltr;text-align: left;font-size:18px">
+                        <input type="hidden" id="promo_id" />
+                        <input type="hidden" id="promo_discount" />
+
+                    </div>
+                    <button id="btnCheckPromo" style="
+cursor:pointer;
+    margin-top: 32px;
+    height: 40px;
+    width: 95px;
+    margin-right: 9px;
+">
+                        Kiểm tra
+                    </button>
+
+                </div>
+
+                <div class="homerightbannercustomer">
+                    <img src="~/Image/Free/money.png" alt="alo" />
+                    <div class="homerightbannercustomer">
+                        <p>Khách hàng đã trả</p>
+                        <input type="text" id="moneycustommerpay" class="moneycustommerpay" placeholder="Nhập số tiền khách hàng" style="height: 40px;width: 276px;padding: 8px 10px 8px 32px;border: none;border-radius: 4px;direction: ltr;text-align: left;font-size:18px">
+
+                    </div>
+                </div>
+
+                <div class="homerightbannercustomerbill">
+                    <img src="~/Image/Free/thoilai.png" alt="alo" />
+                    <div class="homerighcustomerbill">
+                        <p>Thối lại</p>
+                        <span id="customermoney" class="customermoney">0</span>
+                    </div>
+                </div>
+
+
+                <div class="homerightbannerseecustomer">
+                    <div class="homerighseecustomerleft">
+                        <p>ID khách hàng</p>
+                        <span id="customerid" style="font-size: 25px;" class="customerid">0</span>
+
+
+                    </div>
+                    <div class="homerighseecustomerright">
+                        <input type="text" id="custommerphone" class="custommerphone" placeholder="Nhập số điện thoại khách hàng" style="height: 40px;width: 276px;padding: 8px 10px 8px 32px;border: none;border-radius: 4px;direction: ltr;text-align: left;font-size:18px;margin-top: 15px;">
+                        <button id="btncheckphone" style="
+margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margin-right: 9px;
+">
+                            Kiểm tra
+                        </button>
+                    </div>
+                </div>
+
+                <div class="logout-section" style="margin-top:15px;">
+                    <button class="btntaokh" onclick="confirmtaokh()">
+                        <i class="bi bi-box-arrow-right me-2"></i>Tạo khách hàng
+                    </button>
+                </div>
+                <div class="logout-section">
+                    <button class="btnthanhtoan">
+                        <i class="bi bi-box-arrow-right me-2"></i>Thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const products = document.querySelectorAll('.product-card');
+            const perPage = 3; // số sản phẩm hiển thị mỗi lần
+            let currentPage = 1;
+            const totalPages = Math.ceil(products.length / perPage);
+
+            function showPage(page) {
+                products.forEach((p, i) => {
+                    const start = (page - 1) * perPage;
+                    const end = start + perPage;
+                    p.style.display = (i >= start && i < end) ? 'block' : 'none';
+                });
+            }
+
+            document.querySelector('.productnext').addEventListener('click', () => {
+                currentPage++;
+                if (currentPage > totalPages) currentPage = 1;
+                showPage(currentPage);
+            });
+
+            document.querySelector('.productprev').addEventListener('click', () => {
+                currentPage--;
+                if (currentPage < 1) currentPage = totalPages;
+                showPage(currentPage);
+            });
+
+            // Hiển thị 2 sản phẩm đầu tiên
+            showPage(currentPage);
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            /* =========================================================================
+                1. LẤY CÁC DOM CHÍNH
+            ========================================================================= */
+            const tableBody = document.querySelector(".productsell tbody");
+            const lblTotalQty = document.querySelector(".qualityproduct span");
+            const lblTotalMoney = document.querySelector(".sumproduct span");
+            const lblPoints = document.querySelector(".homerightcustomerpoint span");
+
+            let totalQty = Number(lblTotalQty.textContent) || 0;
+            let totalMoney = Number(lblTotalMoney.textContent) || 0;
+            let totalPoints = Number(lblPoints.textContent) || 0;
+
+            /* =========================================================================
+                2. CẬP NHẬT TỔNG TIỀN / ĐIỂM TÍCH LŨY
+            ========================================================================= */
+            function updateTotalMoney(type, amount) {
+                if (type === "add") totalMoney += amount;
+                else totalMoney -= amount;
+                if (totalMoney < 0) totalMoney = 0;
+
+                lblTotalMoney.textContent = totalMoney;
+                updatePoints();
+            }
+
+            function updatePoints() {
+                totalPoints = Math.floor(totalMoney / 10000);
+                lblPoints.textContent = totalPoints;
+            }
+
+            /* =========================================================================
+                3. CẬP NHẬT THÀNH TIỀN HÀNG
+            ========================================================================= */
+            function updateRowTotal(row, price) {
+                const qty = Number(row.querySelector("input").value) || 1;
+                const money = qty * price;
+                row.querySelector(".sum1bill").textContent = money.toLocaleString();
+                updatePoints();
+            }
+
+            /* =========================================================================
+                4. GẮN SỰ KIỆN TĂNG GIẢM
+            ========================================================================= */
+            function attachQtyEvents(row, price) {
+                let input = row.querySelector("input");
+                let btnDec = row.querySelector(".decrease");
+                let btnInc = row.querySelector(".increase");
+
+                btnDec.onclick = () => {
+                    let qty = Number(input.value);
+                    if (qty > 1) {
+                        input.value = qty - 1;
+                        totalQty--;
+                        lblTotalQty.textContent = totalQty;
+                        updateRowTotal(row, price);
+                        updateTotalMoney("minus", price);
+                    }
+                };
+
+                btnInc.onclick = () => {
+                    input.value = Number(input.value) + 1;
+                    totalQty++;
+                    lblTotalQty.textContent = totalQty;
+                    updateRowTotal(row, price);
+                    updateTotalMoney("add", price);
+                };
+
+                input.oninput = () => {
+                    input.value = input.value.replace(/[^0-9]/g, '') || "1";
+                    updateRowTotal(row, price);
+                };
+            }
+
+            /* =========================================================================
+                5. XÓA SẢN PHẨM
+            ========================================================================= */
+            function attachDeleteEvent(row) {
+                row.querySelector(".delete-btn").onclick = () => {
+                    if (!confirm("Xóa sản phẩm?")) return;
+
+                    const qty = Number(row.querySelector("input").value) || 0;
+                    const money = Number(row.querySelector(".sum1bill").textContent.replace(/[^\d]/g, "")) || 0;
+
+                    totalQty -= qty;
+                    lblTotalQty.textContent = totalQty;
+
+                    updateTotalMoney("minus", money);
+
+                    row.remove();
+                    Array.from(tableBody.rows).forEach((r, i) => r.cells[0].textContent = i + 1);
+                };
+            }
+
+            /* =========================================================================
+                6. XỬ LÝ BẤM SẢN PHẨM TRONG DANH MỤC
+            ========================================================================= */
+            document.querySelectorAll(".product-card").forEach(card => {
+                card.onclick = () => {
+                    addProductToTable({
+                        id: card.dataset.productId,
+                        name: card.dataset.name,
+                        price: Number(card.dataset.price),
+                        unit: card.dataset.unit || ""
+                    });
+                };
+            });
+
+            /* =========================================================================
+                7. HÀM THÊM SẢN PHẨM
+            ========================================================================= */
+            function addProductToTable(p) {
+
+                const existed = Array.from(tableBody.rows).find(row => row.cells[1].textContent === p.id);
+
+                // --- TĂNG SỐ LƯỢNG ---
+                if (existed) {
+                    let input = existed.querySelector("input");
+                    input.value = Number(input.value) + 1;
+                    totalQty++;
+                    lblTotalQty.textContent = totalQty;
+                    updateRowTotal(existed, p.price);
+                    updateTotalMoney("add", p.price);
+                    return;
+                }
+
+                // --- THÊM DÒNG MỚI ---
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${tableBody.rows.length + 1}</td>
+                    <td class="productid">${p.id}</td>
+                    <td class="productname">${p.name}</td>
+                    <td>${p.unit}</td>
+                    <td>
+                        <div class="qty-control">
+                            <button class="decrease">-</button>
+                            <input type="text" value="1" class="producqty" />
+                            <button class="increase">+</button>
+                        </div>
+                    </td>
+                    <td class="productprice">${p.price.toLocaleString()}</td>
+                    <td class="sum1bill producttotal">${p.price.toLocaleString()}</td>
+                    <td><button class="delete-btn"><i class="fa-solid fa-trash-can"></i></button></td>
+                `;
+
+                tableBody.appendChild(row);
+
+                totalQty++;
+                lblTotalQty.textContent = totalQty;
+
+                updateTotalMoney("add", p.price);
+
+                attachQtyEvents(row, p.price);
+                attachDeleteEvent(row);
+            }
+
+            /* =========================================================================
+                8. SEARCH SẢN PHẨM
+            ========================================================================= */
+            const searchInput = document.getElementById("searchInput");
+            const searchResults = document.getElementById("searchResults");
+        const imageBaseUrl = '@Url.Content("~/Image/product")';
+                    searchInput.oninput = () => {
+                let text = searchInput.value.trim();
+                if (text.length < 1) return searchResults.style.display = "none";
+
+                fetch(`/Sales/Search?keyword=${encodeURIComponent(text)}`)
+                    .then(res => res.json())
+                    .then(list => {
+                        searchResults.innerHTML = "";
+                        if (!list.length) return searchResults.style.display = "none";
+
+                        list.forEach(p => {
+                            let div = document.createElement("div");
+                            div.className = "searchitem";
+                            div.dataset.productId = p.productId;
+                            div.dataset.name = p.productName;
+                            div.dataset.price = p.price;
+                            div.dataset.unit = p.unit;
+
+                            div.innerHTML = `
+                                <div class="searchitemleft">
+        <img src="/Image/product/${p.imageUrl}">
+                                </div>
+                                <div class="searchitemcenter">
+                                    <p>Mã: ${p.productId}</p>
+                                    <p>${p.productName}</p>
+                                </div>
+                                <div class="searchitemright">
+                                    <p>${p.price.toLocaleString()} đ</p>
+                                    <p>SL: ${p.quantity}</p>
+                                </div>
+                            `;
+        div.onclick = () => {
+            addProductToTable({
+                id: p.productId,
+                name: p.productName,
+                price: Number(p.price),
+                unit: p.unit
+            });
+
+            searchInput.value = "";
+            searchResults.style.display = "none";
+        };
+
+
+                            searchResults.appendChild(div);
+                        });
+
+                        searchResults.style.display = "block";
+                    });
+            };
+
+            /* =========================================================================
+                9. MÃ GIẢM GIÁ
+            ========================================================================= */
+                   document.getElementById("btnCheckPromo")?.addEventListener("click", async function () {
+            const code = document.getElementById("promocustomer").value.trim();
+            if (!code) return showToast("Nhập mã giảm giá!", "crimson");
+
+            const res = await fetch(`/Sales/searchmagiam?keyword=${code}`);
+            if (!res.ok) return showToast("Mã không tồn tại!", "crimson");
+
+            const promo = await res.json();
+
+            let now = new Date();
+            let start = new Date(promo.startDate);
+            let end = new Date(promo.endDate);
+
+            if (now < start || now > end)
+                return showToast("Mã giảm giá hết hạn!", "crimson");
+
+            if (promo.status.toLowerCase() !== "active")
+                return showToast("Mã không hoạt động!", "crimson");
+
+            if (totalMoney < promo.minOrderAmount)
+                return showToast(`Đơn phải đạt ${promo.minOrderAmount.toLocaleString()}đ`, "crimson");
+
+            // TÍNH GIẢM
+            let discount = promo.discountType === "percent"
+                ? totalMoney * promo.discountValue / 100
+                : promo.discountValue;
+
+            totalMoney -= discount;
+            lblTotalMoney.textContent = totalMoney;
+            //updatePoints();
+
+            // LƯU VÀO INPUT HIDDEN (QUAN TRỌNG)
+            document.getElementById("promo_id").value = promo.promoId;
+            document.getElementById("promo_discount").value = discount;
+
+            document.getElementById("promocustomer").value = "Áp dụng thành công";
+            showToast("Áp dụng mã thành công!", "green");
+
+            await fetch(`/Sales/UpdatePromoUsage?keyword=${code}`, { method: "POST" });
+        });
+
+
+            function showToast(msg, color = "black") {
+                const t = document.getElementById("toast");
+                t.textContent = msg;
+                t.style.background = color;
+                t.style.opacity = 1;
+                setTimeout(() => t.style.opacity = 0, 2000);
+            }
+
+            /* =========================================================================
+                10. TIỀN KHÁCH TRẢ – TIỀN THỐI
+            ========================================================================= */
+            document.getElementById("moneycustommerpay")?.addEventListener("input", function () {
+                let raw = this.value.replace(/,/g, "");
+                let pay = Number(raw) || 0;
+                let change = pay - totalMoney;
+                document.getElementById("customermoney").textContent = change;
+            });
+
+            /* =========================================================================
+                11. SPLITTER KÉO LÊN XUỐNG
+            ========================================================================= */
+            const splitter = document.getElementById("splitter");
+            const topPane = document.querySelector(".productsell");
+            const container = document.querySelector(".maincontainer");
+            let dragging = false;
+
+            splitter.onmousedown = () => {
+                dragging = true;
+                document.body.style.cursor = "row-resize";
+            };
+
+            document.onmousemove = e => {
+                if (!dragging) return;
+                const rect = container.getBoundingClientRect();
+                let y = e.clientY - rect.top;
+                if (y > 100 && y < rect.height - 200)
+                    topPane.style.height = y + "px";
+            };
+
+            document.onmouseup = () => {
+                dragging = false;
+                document.body.style.cursor = "default";
+            };
+
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $("#btncheckphone").click(function () {
+
+            var phone = $("#custommerphone").val(); // input số điện thoại
+
+            $.ajax({
+                url: '/Sales/CheckCustomerPhone',
+                type: 'GET',
+                data: { phone: phone },
+
+                success: function (res) {
+                    if (res.success) {
+                        // ✔ Gán ID khách hàng vào span customermoney
+                        $("#customerid").text(res.customerId);
+                    } else {
+                        $("#customerid").text("0"); // hoặc "Không có"
+                        alert("Không tìm thấy khách hàng");
+                    }
+                },
+
+                error: function () {
+                    alert("Lỗi kết nối server");
+                }
+            });
+        });
+    </script>
+
+
+
+    <script>
+        document.querySelector(".btnthanhtoan").addEventListener("click", function () {
+            // LẤY DANH SÁCH SẢN PHẨM
+            const rows = document.querySelectorAll("#cartTableBody tr");
+            console.log("PROMO_ID:", document.getElementById("promo_id").value);
+
+            let items = [];
+            rows.forEach(row => {
+                     const idCell = row.querySelector(".productid");
+            const qtyCell = row.querySelector(".productname");
+            const priceCell = row.querySelector(".producttotal");
+
+        console.log(`--- DÒNG check ---`);
+        console.log("product-id:", idCell?.innerText);
+        console.log("qty:", qtyCell?.innerText);
+        console.log("price:", priceCell?.innerText);
+                items.push({
+                    productId: parseInt(row.querySelector(".productid").innerText),
+                    quantity: parseInt(row.querySelector(".producqty").value),
+                    price: parseFloat(row.querySelector(".producttotal").innerText)
+                });
+            });
+
+            //  LẤY CÁC GIÁ TRỊ KHÁC
+            // const data = {
+            //     UserId: @nvid+"",
+            //     customerId: parseInt(document.getElementById("customerid").innerText),
+            //     promoCode: document.getElementById("promocustomer").value,
+            //     totalAmount: parseFloat(document.querySelector(".sumproduct span").innerText),
+            //     discountAmount: 0, nếu bạn có khuyến mãi thì thay đổi ở đây
+            //     moneyPay: parseFloat(document.getElementById("moneycustommerpay").value),
+            //     moneyReturn: parseFloat(document.getElementById("customermoney").innerText),
+            //     items: items
+            // };
+                    const data = {
+            UserId: @nvid,
+            customerId: parseInt(document.getElementById("customerid").innerText),
+
+            promoId: document.getElementById("promo_id").value
+                ? parseInt(document.getElementById("promo_id").value)
+                : null,
+
+            totalAmount: parseFloat(document.querySelector(".sumproduct span").innerText),
+
+            discountAmount: parseFloat(
+                document.getElementById("promo_discount").value || 0
+            ),
+
+            items: items
+        };
+
+            console.log("DATA GỬI LÊN:", data);
+
+            // 🎯 GỬI LÊN CONTROLLER
+                   fetch("/Sales/Checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+        .then(async res => {
+            const text = await res.text();
+            console.log("RAW RESPONSE FROM BACKEND:", text);
+
+            if (!res.ok) {
+                alert(" Lỗi từ server: " + text);
+                throw new Error(text);
+            }
+
+            try {
+                return JSON.parse(text);
+            } catch {
+                throw new Error("❌ Backend không trả JSON hợp lệ!");
+            }
+        })
+        .then(result => {
+            alert("Thanh toán thành công! Mã đơn: " + result.orderId);
+        })
+        .catch(err => console.error("🔥 Lỗi:", err));
+
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -17,7 +17,7 @@ public partial class OrderItem
     public decimal Price { get; set; }
 
     public decimal Subtotal { get; set; }
+    public virtual Order Order { get; set; }
 
-    [NotMapped]
-    public string ProductName { get; set; }
+
 }
