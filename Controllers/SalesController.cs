@@ -89,7 +89,7 @@ namespace RetailStore.Controllers
                                 p.ProductId,
                                 p.ProductName,
                                 p.Price,
-                                p.ImageUrl,
+                                ImageUrl = p.ImageUrl ?? "/images/products/null-image.png",
                                 p.Unit,
                                 Quantity = inv != null ? inv.Quantity ?? 0 : 0
                             })
