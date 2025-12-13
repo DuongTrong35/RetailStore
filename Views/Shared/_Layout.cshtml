@@ -1,4 +1,4 @@
-﻿@{
+@{
     var role = Context.Session.GetInt32("NumberRole");
     var username = Context.Session.GetString("UserName");
     var nameuserole = Context.Session.GetString("UserRole");
@@ -42,6 +42,16 @@
                     </div>
                     <p>Trang chủ</p>
                 </li>
+                @if (role == 1)
+                {
+                    <li class= "@(currentController == "Product" ? "active" : "")" data-url="/Product/Index">
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/ProductIcon.png" alt="" />
+                        </div>
+                        <p>Quản lý Sản phẩm</p>
+                        
+                    </li>
+                }
                 @if (role == 1)
                 {
                     <li class="@(currentController == "Staff" ? "active" : "")" data-url="/Staff/Index">
