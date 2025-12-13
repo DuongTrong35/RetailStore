@@ -363,8 +363,9 @@ input[type="text"] {
 }
 
 .product-card {
-    background: white;
+    background: #F0F8FF;
     border-radius: 8px;
+    border: 1px solid #D6E4FF;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     width: 160px;
     text-align: center;
