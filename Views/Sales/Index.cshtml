@@ -129,7 +129,9 @@
                                         </div>
                                     } *@
                                     <div class="product-img">
-                                        <img src="@Url.Content(item.image)" alt="@item.ProductName" />
+                                        <img src="@Url.Content("~/Images/products/" + item.image)" alt="@item.ProductName" />
+
+                                        @* <img src="@Url.Content(item.image)" alt="@item.ProductName" /> *@
                                     </div>
                                     <div class="product-info">
                                         <h3>@item.ProductName</h3>
@@ -437,7 +439,9 @@ margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margi
             ========================================================================= */
             const searchInput = document.getElementById("searchInput");
             const searchResults = document.getElementById("searchResults");
-        const imageBaseUrl = '@Url.Content("~/Images/products")';
+                    const imageBaseUrl = '@Url.Content("~/Images/products")';
+
+        // const imageBaseUrl = '@Url.Content("~/Images/products")';
                     searchInput.oninput = () => {
                 let text = searchInput.value.trim();
                 if (text.length < 1) return searchResults.style.display = "none";
@@ -458,7 +462,7 @@ margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margi
 
                             div.innerHTML = `
                                 <div class="searchitemleft">
-        <img src="${p.imageUrl}">
+        <img src="/Images/products/${p.imageUrl}">
                                 </div>
                                 <div class="searchitemcenter">
                                     <p>Mã: ${p.productId}</p>
