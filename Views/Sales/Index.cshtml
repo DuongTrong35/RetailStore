@@ -684,7 +684,10 @@ margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margi
             }
         })
         .then(result => {
-            alert("Thanh toán thành công! Mã đơn: " + result.orderId);
+            //alert("Thanh toán thành công! Mã đơn: " + result.orderId);
+                 if (confirm("Thanh toán thành công!\nMã đơn: " + result.orderId + "\nQuay về trang bán hàng?")) {
+            window.location.href = "/Sales/Index";
+        }
         })
         .catch(err => console.error("🔥 Lỗi:", err));
 
