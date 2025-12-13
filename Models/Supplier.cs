@@ -1,17 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RetailStore.Models;
-
-public partial class Supplier
+namespace RetailStore.Models
 {
-    public int SupplierId { get; set; }
+    [Table("suppliers")]
+    public class Supplier
+    {
+        [Key]
+        [Column("supplier_id")]
+        public int SupplierId { get; set; }
 
-    public string Name { get; set; } = null!;
+        [Column("name")]
+        [Required(ErrorMessage = "Tên nhà cung cấp là bắt buộc")]
+        [StringLength(100)]
+        [Display(Name = "Tên nhà cung cấp")]
+        public string Name { get; set; } = null!;
 
-    public string? Phone { get; set; }
+        [Column("phone")]
+        [StringLength(20)]
+        [Display(Name = "Số điện thoại")]
+        public string? Phone { get; set; }
 
-    public string? Email { get; set; }
+        [Column("email")]
+        [StringLength(100)]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
+        [Display(Name = "Email")]
+        public string? Email { get; set; }
 
-    public string? Address { get; set; }
+        [Column("address")]
+        [Display(Name = "Địa chỉ")]
+        public string? Address { get; set; } 
+
+    }
 }
