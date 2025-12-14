@@ -21,9 +21,9 @@ public class InvoiceDocument : IDocument
         decimal discount = _order.DiscountAmount ?? 0;  // nếu null thì dùng 0
         decimal totalAmount = _order.OrderItems.Sum(i => i.Quantity * i.Price);
 
-        string totalText = (totalAmount * 1000).ToString("N0") + " đ";
+        string totalText = (totalAmount).ToString("N0") + " đ";
         string discountText = (discount).ToString("N0") + " đ";
-        string paymentText = ((totalAmount*1000 - discount)).ToString("N0") + " đ";
+        string paymentText = ((totalAmount - discount)).ToString("N0") + " đ";
 
         container.Page(page =>
         {
@@ -70,8 +70,8 @@ public class InvoiceDocument : IDocument
                     {
                         table.Cell().Text(i.ProductId.ToString());
                         table.Cell().Text(i.Quantity.ToString());
-                        table.Cell().Text((i.Price).ToString("N0") + ".000 đồng");
-                        table.Cell().Text((i.Quantity * i.Price).ToString("N0") + ".000 đồng");
+                        table.Cell().Text((i.Price).ToString("N0") + " đồng");
+                        table.Cell().Text((i.Quantity * i.Price).ToString("N0") + " đồng");
                     }
                 });
 

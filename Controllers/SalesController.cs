@@ -208,7 +208,6 @@ namespace RetailStore.Controllers
             if (customer != null)
             {
                 int earnedPoints = (int)(req.TotalAmount / 10000);
-                // ví dụ: 10k = 1 điểm → bạn muốn công thức nào nói tôi sửa
 
                 customer.LoyaltyPoints += earnedPoints;
 
