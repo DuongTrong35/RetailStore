@@ -68,7 +68,7 @@ public class InvoiceDocument : IDocument
                     // Nội dung
                     foreach (var i in _order.OrderItems)
                     {
-                        table.Cell().Text(i.ProductId.ToString());
+                        table.Cell().Text(i.ProductName.ToString());
                         table.Cell().Text(i.Quantity.ToString());
                         table.Cell().Text((i.Price).ToString("N0") + " đồng");
                         table.Cell().Text((i.Quantity * i.Price).ToString("N0") + " đồng");
@@ -76,9 +76,9 @@ public class InvoiceDocument : IDocument
                 });
 
                 // ===== TOTAL =====
-                col.Item().AlignRight().Text($"Tổng tiền: {totalText}").Bold();
-                col.Item().AlignRight().Text($"Giảm giá: {discountText}");
-                col.Item().AlignRight().Text($"Thanh toán: {paymentText}")
+                col.Item().AlignRight().Text($"Tổng tiền: {totalText} đồng").Bold();
+                col.Item().AlignRight().Text($"Giảm giá: {discountText} đồng");
+                col.Item().AlignRight().Text($"Thanh toán: {paymentText} đồng")
                     .FontSize(13)
                     .Bold();
             });
