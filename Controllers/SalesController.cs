@@ -166,7 +166,7 @@ namespace RetailStore.Controllers
                 PromoId = req.PromoId,
                 TotalAmount = req.TotalAmount,
                 DiscountAmount = req.DiscountAmount,
-                Status = "paid",
+                Status = "pending",
                 OrderDate = DateTime.Now
             };
 
