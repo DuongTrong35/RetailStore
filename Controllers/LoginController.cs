@@ -46,6 +46,8 @@ namespace RetailStore.Controllers
             int idrole = 1;
             if (user.Role == "staff") idrole = 2;
             else if (user.Role == "sales") idrole = 3;
+            else if (user.Role == "importer") idrole = 4;
+
             string nametat = string.Concat(
                 user.FullName
                     .Split(' ', StringSplitOptions.RemoveEmptyEntries)

@@ -43,16 +43,17 @@
                     </div>
                     <p>Trang chủ</p>
                 </li>
+                @if (role == 1 || role==2)
+                {
+                    <li class="@(currentController == "Products" ? "active" : "")" data-url="/Products/Index">
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/ProductIcon.png" alt="" />
+                        </div>
+                        <p>Quản lý Sản phẩm</p>
 
-                <li class="@(currentController == "Products" ? "active" : "")" data-url="/Products/Index">
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/ProductIcon.png" alt="" />
-                    </div>
-                    <p>Quản lý Sản phẩm</p>
-
-                </li>
-
-                @if (role == 1)
+                    </li>
+                }
+                @if (role == 1 || role == 2)
                 {
                     <li class="@(currentController == "Staff" ? "active" : "")" data-url="/Staff/Index">
                         <div class="HomeLeftImg">
@@ -61,13 +62,16 @@
                         <p>Nhân viên</p>
                     </li>
                 }
-                <li class="@(currentController == "Customer" ? "active" : "")" data-url="/Customer/Index">
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/customer-satisfaction.png" alt="" />
-                    </div>
-                    <p>Khách hàng</p>
-                </li>
-                @if (role == 1)
+                @if (role == 1 || role == 2 || role==3)
+                {
+                    <li class="@(currentController == "Customer" ? "active" : "")" data-url="/Customer/Index">
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/customer-satisfaction.png" alt="" />
+                        </div>
+                        <p>Khách hàng</p>
+                    </li>
+                }
+                @if (role == 1 ||  role == 2)
                 {
                     <li class="@(currentController == "Category" ? "active" : "")" data-url="/Category/Index">
                         <div class="HomeLeftImg">
@@ -76,40 +80,54 @@
                         <p>Danh mục</p>
                     </li>
                 }
-                <li class="@(currentController == "Import" ? "active" : "")" data-url="/Import/Index">
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/import.png" alt="" />
-                    </div>
-                    <p>Phiếu nhập</p>
-                </li>
-                <li data-url="/Bill/Index">
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/invoice.png" alt="" />
-                    </div>
-                    <p>Hóa đơn</p>
-                </li>
-                <li class="salesbill">
-                    <a href="/Sales/Index" style="width:100%; display:flex; list-style:none;text-decoration:none;color:black">
-
+                @if (role == 1 || role == 4 || role==2)
+                {
+                    <li class="@(currentController == "Import" ? "active" : "")" data-url="/Import/Index">
                         <div class="HomeLeftImg">
-                            <img src="~/Icons/supplier.png" alt="" />
+                            <img src="~/Icons/import.png" alt="" />
                         </div>
-                        <p>Thanh toán hàng</p>
-                    </a>
-                </li>
+                        <p>Phiếu nhập</p>
+                    </li>
+                }
+                  @if (role == 1 || role == 3)
+                {
+                    <li data-url="/Bill/Index">
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/invoice.png" alt="" />
+                        </div>
+                        <p>Hóa đơn</p>
+                    </li>
+                }
+                                  @if (role == 1 || role == 3)
+                {
+                    <li class="salesbill">
+                        <a href="/Sales/Index" style="width:100%; display:flex; list-style:none;text-decoration:none;color:black">
+
+                            <div class="HomeLeftImg">
+                                <img src="~/Icons/supplier.png" alt="" />
+                            </div>
+                            <p>Thanh toán hàng</p>
+                        </a>
+                    </li>
+                }
+                 @if (role == 1 || role == 3 || role ==2)
+                {
                 <li class="@(currentController == "Promotion" ? "active" : "")" data-url="/Promotion/Index">
                     <div class="HomeLeftImg">
                         <img src="~/Icons/coupon.png" alt="" />
                     </div>
                     <p>Ưu đãi</p>
                 </li>
-
-                <li class="@(currentController == "Supplier" ? "active" : "")" data-url="/Supplier/Index">
-                    <div class="HomeLeftImg">
-                        <img src="~/Icons/supplier.png" alt="" />
-                    </div>
-                    <p>Nhà cung cấp</p>
-                </li>
+                }
+                 @if (role == 1 || role == 4)
+                {
+                    <li class="@(currentController == "Supplier" ? "active" : "")" data-url="/Supplier/Index">
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/supplier.png" alt="" />
+                        </div>
+                        <p>Nhà cung cấp</p>
+                    </li>
+                }
                 @if (role == 1)
                 {
                     <li class="@(currentController == "Account" ? "active" : "")" data-url="/Account/Index">
@@ -118,12 +136,9 @@
                         </div>
                         <p>Tài khoản</p>
                     </li>
-                    @* <li>
-                        <div class="HomeLeftImg">
-                            <img src="~/Icons/authorization.png" class="leftcenterarrow" />
-                        </div>
-                        <p>Phân quyền</p>
-                    </li> *@
+                }
+                @if (role == 1 || role ==2)
+                {
                     <li class="@(currentController == "Dashboard" ? "active" : "")" data-url="/Dashboard/Index">
                         <div class="HomeLeftImg">
                             <img src="~/Icons/statistics.png" class="leftcenterarrow" />
