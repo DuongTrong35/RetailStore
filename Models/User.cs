@@ -31,4 +31,7 @@ public partial class User
 
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; }
+
+    public string Email { get; set; }
+
 }

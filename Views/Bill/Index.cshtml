@@ -82,7 +82,9 @@
                                 }
                                 else if (item.Status == "pending")
                                 {
-                                    <button class="btn btn-sm btn-pay" style="background-color:red; color:white">
+                                    <button class="btn btn-sm btn-pay"
+                                            data-id="@item.OrderId"
+                                            style="background-color:red; color:white">
                                         Xác nhận đã thanh toán
                                     </button>
 

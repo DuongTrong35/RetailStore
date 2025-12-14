@@ -82,7 +82,12 @@
                         </button>
 
                         <!-- Forgot password -->
-                        <a href="#" class="text-blue-600 text-sm text-center hover:underline">
+                        @* <a href="#" class="text-blue-600 text-sm text-center hover:underline">
+                            Forgot Password?
+                        </a> *@
+                        <a asp-action="ForgotPassword"
+                           asp-controller="Login"
+                           class="text-blue-600 text-sm text-center hover:underline">
                             Forgot Password?
                         </a>
 

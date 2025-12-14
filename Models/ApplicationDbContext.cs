@@ -15,6 +15,8 @@ public partial class ApplicationDbContext : DbContext
         : base(options)
     {
     }
+    public DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
+
     public virtual DbSet<ImportReceipt> ImportReceipts { get; set; }
 
     public virtual DbSet<ImportDetail> ImportDetails { get; set; }
@@ -297,6 +299,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .HasColumnName("username");
+            entity.Property(e => e.Email)
+.HasMaxLength(100)
+.HasColumnName("email");
         });
 
         modelBuilder.Entity<ImportReceipt>(entity =>
