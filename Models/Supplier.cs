@@ -1,31 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RetailStore.Models;
-
-public partial class Supplier
+namespace RetailStore.Models
 {
-    public int SupplierId { get; set; }
+    [Table("suppliers")]
+    public class Supplier
+    {
+        [Key]
+        [Column("supplier_id")]
+        public int SupplierId { get; set; }
 
-    [Display(Name = "Tên nhà cung cấp")]
-    [Required(ErrorMessage = "Vui lòng nhập tên nhà cung cấp")]
-    [StringLength(100, ErrorMessage = "Tên không được vượt quá 100 ký tự")]
-    public string Name { get; set; } = null!;
+        [Column("name")]
+        [Required(ErrorMessage = "Tên nhà cung cấp là bắt buộc")]
+        [StringLength(100)]
+        [Display(Name = "Tên nhà cung cấp")]
+        public string Name { get; set; } = null!;
 
-    [Display(Name = "Số điện thoại")]
-    [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
-    [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
-    [StringLength(15, ErrorMessage = "Số điện thoại không quá 15 ký tự")]
-    public string? Phone { get; set; }
+        [Column("phone")]
+        [StringLength(20)]
+        [Display(Name = "Số điện thoại")]
+        public string? Phone { get; set; }
 
-    [Display(Name = "Email")]
-    [EmailAddress(ErrorMessage = "Định dạng email không hợp lệ")]
-    [StringLength(100)]
-    public string? Email { get; set; }
+        [Column("email")]
+        [StringLength(100)]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
+        [Display(Name = "Email")]
+        public string? Email { get; set; }
 
-    [Display(Name = "Địa chỉ")]
-    [StringLength(200, ErrorMessage = "Địa chỉ không quá 200 ký tự")]
-    public string? Address { get; set; }
+        [Column("address")]
+        [Display(Name = "Địa chỉ")]
+        public string? Address { get; set; }
+
+    }
 }

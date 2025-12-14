@@ -1,0 +1,72 @@
+﻿@model RetailStore.Models.ImportReceipt
+
+@{
+    ViewData["Title"] = "Chi tiết phiếu nhập";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 text-gray-800">Chi tiết phiếu nhập #@Model.ImportId</h1>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Thông tin phiếu</h6>
+                </div>
+                <div class="card-body">
+                    <p><strong>Mã phiếu:</strong> #@Model.ImportId</p>
+                    <p><strong>Nhà cung cấp:</strong> @(Model.Supplier?.Name ?? "N/A")</p>
+                    <p><strong>Người nhập:</strong> @(Model.User?.FullName ?? "N/A")</p>
+                    <p><strong>Ngày tạo:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                    <hr />
+                    <h4 class="text-danger font-weight-bold text-center">
+                        Tổng: @Model.TotalAmount.ToString("#,##0") VNĐ
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Danh sách sản phẩm nhập</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th class="text-right">Đơn giá</th>
+                                    <th class="text-right">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ImportDetails)
+                                {
+                                <tr>
+                                    <td>
+                                        @item.Product?.ProductName <br />
+                                        <small class="text-muted">Mã: @item.Product?.Barcode</small>
+                                    </td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-right">@item.ImportPrice.ToString("#,##0")</td>
+                                    <td class="text-right font-weight-bold">
+                                        @item.Subtotal.ToString("#,##0")
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

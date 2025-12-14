@@ -8,5 +8,9 @@ namespace RetailStore.Controllers
         {
             return View();
         }
+        public IActionResult HomeEmployee()
+        {
+            return PartialView();
+        }
     }
 }

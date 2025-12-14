@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RetailStore.Models;
-
-public partial class Category
+namespace RetailStore.Models
 {
-    public int CategoryId { get; set; }
+    [Table("categories")]
+    public class Category
+    {
+        [Key]
+        [Column("category_id")]
+        public int CategoryId { get; set; }
 
-    [Required(ErrorMessage = "Tên danh mục là bắt buộc.")]
-    [StringLength(100)]
-    public string CategoryName { get; set; } = null!;
+        [Column("category_name")]
+        [Required(ErrorMessage = "Tên danh mục là bắt buộc")]
+        [StringLength(100, ErrorMessage = "Tên danh mục tối đa 100 ký tự")]
+        [Display(Name = "Tên danh mục")]
+        public string CategoryName { get; set; } = null!;
+
+    }
 }

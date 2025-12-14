@@ -42,6 +42,7 @@ namespace RetailStore.Controllers
             HttpContext.Session.SetString("UserName", user.Username);
             HttpContext.Session.SetString("UserRole", user.FullName);
             HttpContext.Session.SetString("NameRole", user.Role);
+            HttpContext.Session.SetInt32("nvid", user.UserId);
             HttpContext.Session.SetString("ShortName", nametat);
 
 
