@@ -1,22 +1,21 @@
 ﻿@{
-    ViewData["Title"] = "Chỉnh sửa tài khoản";
+    ViewData["Title"] = "Thêm nhân viên mới";
     if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
     {
         Layout = null;
     }
 }
+
 @model RetailStore.Models.User
 
 <div>
     <div class="bg-white border-bottom p-3 mb-3">
-        <h2 class="mb-0">Chỉnh sửa tài khoản</h2>
+        <h2 class="mb-0">Thêm nhân viên mới</h2>
     </div>
 
     <div class="px-3">
-        <form asp-action="Edit" method="post">
+        <form asp-action="Create" method="post">
             @Html.AntiForgeryToken()
-            <input type="hidden" asp-for="UserId" />
-            <input type="hidden" asp-for="Password" />
 
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
@@ -26,13 +25,20 @@
 
                         <div class="mb-3">
                             <label asp-for="Username" class="form-label">Tên đăng nhập</label>
-                            <input asp-for="Username" class="form-control" readonly />
+                            <input asp-for="Username" class="form-control" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label">Email</label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Mật khẩu</label>
+                            <input asp-for="Password" type="password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
@@ -43,14 +49,16 @@
 
                         <div class="mb-3">
                             <label asp-for="Role" class="form-label">Vai trò (Role)</label>
+
                             <select asp-for="Role" class="form-select" asp-items="ViewBag.Roles">
                                 <option value="">-- Chọn vai trò --</option>
                             </select>
+
                             <span asp-validation-for="Role" class="text-danger"></span>
                         </div>
 
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                            <button type="submit" class="btn btn-primary">Tạo mới</button>
                             <a asp-action="Index" class="btn btn-outline-danger ms-2">Hủy</a>
                         </div>
                     </div>
