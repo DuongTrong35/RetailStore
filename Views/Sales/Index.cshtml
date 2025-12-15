@@ -627,13 +627,13 @@ margin-left: 76px;cursor:pointer;margin-top: 15px;height: 40px;width: 95px;margi
             rows.forEach(row => {
                      const idCell = row.querySelector(".productid");
             const qtyCell = row.querySelector(".productname");
-            const priceCell = row.querySelector(".producttotal");
+        //     const priceCell = row.querySelector(".producttotal");
 
-        console.log(`--- DÒNG check ---`);
-        console.log("product-id:", idCell?.innerText);
-        console.log("qty:", qtyCell?.innerText);
-        console.log("price:", priceCell?.innerText);
-        let text = row.querySelector(".producttotal").innerText;
+        // console.log(`--- DÒNG check ---`);
+        // console.log("product-id:", idCell?.innerText);
+        // console.log("qty:", qtyCell?.innerText);
+        // console.log("price:", priceCell?.innerText);
+        let text = row.querySelector(".productprice").innerText;
         let cleanText = text.replace(/[^0-9.]/g, '');
         let price = parseFloat(cleanText);
                 items.push({

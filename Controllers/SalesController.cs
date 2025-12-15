@@ -191,7 +191,7 @@ namespace RetailStore.Controllers
 
             _context.SaveChanges();
 
-            // 3️⃣ Lưu Payment
+            //  Lưu Payment
             var payment = new Payment
             {
                 OrderId = order.OrderId,
@@ -202,7 +202,7 @@ namespace RetailStore.Controllers
 
             _context.Payments.Add(payment);
 
-            // 4️⃣ Cập nhật loyalty point
+            // Cập nhật loyalty point
             var customer = _context.Customers.FirstOrDefault(c => c.CustomerId == req.CustomerId);
 
             if (customer != null)
