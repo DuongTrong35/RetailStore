@@ -1,0 +1,105 @@
+﻿@{
+    ViewData["Title"] = "Tồn kho";
+    if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+        Layout = null;
+    }
+}
+
+@model IEnumerable<RetailStore.Models.Inventory>
+
+<div>
+    <div class="bg-white border-bottom p-3 mb-3">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="mb-0">Quản lý tồn kho</h2>
+            </div>
+
+            <!-- NÚT THÊM -->
+            <div class="col-auto">
+                <a asp-action="Create" class="btn btn-outline-primary">
+                    <i class="bi bi-plus-circle"></i> Thêm tồn kho
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="DeleteSelected" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3 px-3">
+            <button type="submit" class="btn btn-outline-danger"
+                    onclick="return confirm('Bạn có chắc chắn muốn xóa các mục đã chọn?');">
+                <i class="bi bi-trash"></i> Xóa mục đã chọn
+            </button>
+        </div>
+
+        <div class="px-3">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>
+                                <input type="checkbox" class="form-check-input" id="selectAll">
+                            </th>
+                            <th>Inventory ID</th>
+                            <th>Product ID</th>
+                            <th>Số lượng</th>
+                            <th>Cập nhật lần cuối</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox"
+                                               class="form-check-input row-checkbox"
+                                               name="selectedIds"
+                                               value="@item.InventoryId">
+                                    </td>
+                                    <td>@item.InventoryId</td>
+                                    <td>@item.ProductId</td>
+                                    <td>@item.Quantity</td>
+                                    <td>
+                                        @(item.UpdatedAt.HasValue
+                                                                        ? item.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")
+                                                                        : "")
+                            </td>
+                            <td>
+                                <!-- NÚT SỬA -->
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.InventoryId"
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pencil"></i> Sửa
+                                </a>
+                            </td>
+                        </tr>
+                                                }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Không có dữ liệu.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    const deleteBtn = document.querySelector("button[type='submit']");
+    const checkboxes = document.querySelectorAll(".row-checkbox");
+
+    function toggleDeleteButton() {
+        deleteBtn.disabled = !Array.from(checkboxes).some(cb => cb.checked);
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener("change", toggleDeleteButton));
+    toggleDeleteButton();
+</script>

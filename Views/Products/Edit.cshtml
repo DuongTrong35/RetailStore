@@ -29,7 +29,7 @@
                                 <div class="border p-1 rounded text-center">
                                     @if (!string.IsNullOrEmpty(Model.ImageUrl))
                                     {
-                                        <img src="@Model.ImageUrl" class="img-fluid" style="max-height: 150px;" alt="@Model.ProductName" />
+                                        <img src="@Url.Content("~/Images/products/" + @Model.ImageUrl)" class="img-fluid" style="max-height: 150px;" alt="@Model.ProductName" />
                                     }
                                     else
                                     {

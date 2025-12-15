@@ -80,6 +80,17 @@
                         <p>Danh mục</p>
                     </li>
                 }
+               
+                @if (role == 1 || role == 3 || role == 2)
+                {
+                    <li class="@(currentController == "Import" ? "active" : "")" data-url="/Inventory/Index">
+                        <div class="HomeLeftImg">
+                            <img src="~/Icons/import.png" alt="" />
+                        </div>
+                        <p>Hàng tồn kho</p>
+                    </li>
+                }
+
                 @if (role == 1 || role == 4 || role==2)
                 {
                     <li class="@(currentController == "Import" ? "active" : "")" data-url="/Import/Index">
