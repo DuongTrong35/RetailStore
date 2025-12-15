@@ -92,6 +92,12 @@
                         </a>
 
                     </form>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="mt-4 text-red-600 text-sm font-medium text-center">
+                            @ViewBag.Error
+                        </div>
+                    }
                 </div>
             </div>
         </div>
