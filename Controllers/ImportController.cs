@@ -22,6 +22,7 @@ namespace RetailStore.Controllers
         // GET: Import/Index
         public async Task<IActionResult> Index(string searchString, DateTime? fromDate, DateTime? toDate)
         {
+            
             // Khởi tạo truy vấn
             var query = _context.ImportReceipts
                 .Include(i => i.Supplier)
@@ -78,6 +79,7 @@ namespace RetailStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int SupplierId, List<int> ProductIds, List<int> Quantities, List<decimal> ImportPrices)
         {
+            var mnv = HttpContext.Session.GetInt32("nvid");
             // Sử dụng Transaction để đảm bảo an toàn dữ liệu (sai là rollback hết)
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -87,7 +89,7 @@ namespace RetailStore.Controllers
                     var importReceipt = new ImportReceipt
                     {
                         SupplierId = SupplierId,
-                        UserId = 1, // Tạm fix ID user admin (hoặc lấy từ session)
+                        UserId = (int)mnv, // Tạm fix ID user admin (hoặc lấy từ session)
                         CreatedAt = DateTime.Now,
                         TotalAmount = 0
                     };

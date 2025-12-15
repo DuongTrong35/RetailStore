@@ -131,6 +131,8 @@ namespace RetailStore.Controllers
             {
                 try
                 {
+                    var existingCustomer = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.CustomerId == id);
+                    customer.CreatedAt = existingCustomer.CreatedAt;
                     // Set audit fields
                     customer.UpdatedAt = DateTime.Now;
                     customer.UpdatedBy = HttpContext.Session.GetString("UserName") ?? "System";
