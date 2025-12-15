@@ -90,7 +90,7 @@ namespace RetailStore.Controllers
                         await product.ImageUpload.CopyToAsync(fileStream);
                     }
 
-                    product.ImageUrl = "/images/products/" + uniqueFileName;
+                    product.ImageUrl = uniqueFileName;
                 }
 
                 _context.Add(product);
@@ -165,7 +165,7 @@ namespace RetailStore.Controllers
                         {
                             await product.ImageUpload.CopyToAsync(fileStream);
                         }
-                        product.ImageUrl = "/images/products/" + uniqueFileName;
+                        product.ImageUrl = uniqueFileName;
                     }
                     else
                     {

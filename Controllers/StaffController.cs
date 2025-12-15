@@ -59,12 +59,44 @@ namespace RetailStore.Controllers
             return View(model);
         }
 
+        public async Task<bool> IsUsernameExistsAsync(string username)
+        {
+            return await _context.Users.AnyAsync(u => u.Username == username);
+        }
+
+        public async Task<bool> IsEmailExistsAsync(string email)
+        {
+            return await _context.Users.AnyAsync(u => u.Email == email);
+        }
+
+        public async Task<bool> IsUsernameExistsAsyncForUpdate(string username, int? excludeUserId = null)
+        {
+            return await _context.Users
+                .AnyAsync(u => u.Username == username && u.UserId != excludeUserId);
+        }
+
+        public async Task<bool> IsEmailExistsAsyncForUpdate(string email, int? excludeUserId = null)
+        {
+            return await _context.Users
+                .AnyAsync(u => u.Email == email && u.UserId != excludeUserId);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Username,Email,Password,FullName,Role")] User user)
         {
             try
             {
+                if (await IsUsernameExistsAsync(user.Username))
+                {
+                    ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
+                }
+
+                if (await IsEmailExistsAsync(user.Email))
+                {
+                    ModelState.AddModelError("Email", "Email đã tồn tại");
+                }
                 if (ModelState.IsValid)
                 {
                     user.CreatedAt = DateTime.Now;
@@ -121,6 +153,16 @@ namespace RetailStore.Controllers
             {
                 _logger.LogWarning($"ID mismatch: URL id={id}, user.UserId={user.UserId}");
                 return NotFound();
+            }
+
+            if (await IsUsernameExistsAsyncForUpdate(user.Username, id))
+            {
+                ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
+            }
+
+            if (await IsEmailExistsAsyncForUpdate(user.Email, id))
+            {
+                ModelState.AddModelError("Email", "Email đã tồn tại");
             }
 
             if (!ModelState.IsValid)
