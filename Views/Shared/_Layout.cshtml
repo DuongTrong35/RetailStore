@@ -83,9 +83,9 @@
                
                 @if (role == 1 || role == 3 || role == 2)
                 {
-                    <li class="@(currentController == "Import" ? "active" : "")" data-url="/Inventory/Index">
+                    <li class="@(currentController == "Inventory" ? "active" : "")" data-url="/Inventory/Index">
                         <div class="HomeLeftImg">
-                            <img src="~/Icons/import.png" alt="" />
+                            <img src="~/Icons/inventory.png" alt="" />
                         </div>
                         <p>Hàng tồn kho</p>
                     </li>
@@ -102,20 +102,20 @@
                 }
                   @if (role == 1 || role == 3)
                 {
-                    <li data-url="/Bill/Index">
+                    <li class="@(currentController == "Bill" ? "active" : "")" data-url="/Bill/Index">
                         <div class="HomeLeftImg">
-                            <img src="~/Icons/invoice.png" alt="" />
+                            <img src="~/Icons/bill.png" alt="" />
                         </div>
                         <p>Hóa đơn</p>
                     </li>
                 }
                                   @if (role == 1 || role == 3)
                 {
-                    <li class="salesbill">
+                    <li class="salesbill @(currentController == "Sales" ? "active" : "")">
                         <a href="/Sales/Index" style="width:100%; display:flex; list-style:none;text-decoration:none;color:black">
 
                             <div class="HomeLeftImg">
-                                <img src="~/Icons/supplier.png" alt="" />
+                                <img src="~/Icons/selling.png" alt="" />
                             </div>
                             <p>Thanh toán hàng</p>
                         </a>
