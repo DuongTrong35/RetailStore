@@ -76,7 +76,7 @@
                                 <td class="text-center">
                                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                                     {
-                                        <img src="@item.ImageUrl" class="rounded border" style="width: 50px; height: 50px; object-fit: cover;" alt="Product Img" />
+                                        <img src=@Url.Content("~/Images/products/" + item.ImageUrl) class="rounded border" style="width: 50px; height: 50px; object-fit: cover;" alt="Product Img" />
                                     }
                                     else
                                     {
