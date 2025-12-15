@@ -89,7 +89,7 @@ namespace RetailStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,Password,FullName,Role")] User user)
+        public async Task<IActionResult> Create([Bind("Username,Email,Password,FullName,Role")] User user)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace RetailStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId, Password, Username,FullName,Role")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Email,Password, Username,FullName,Role")] User user)
         {
             _logger.LogInformation($"Edit POST: UserId={id}, ModelState.IsValid={ModelState.IsValid}");
 
