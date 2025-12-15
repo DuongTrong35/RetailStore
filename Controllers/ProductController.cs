@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using RetailStore.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
-
-using Microsoft.AspNetCore.Hosting;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RetailStore.Controllers
 {
@@ -20,6 +21,7 @@ namespace RetailStore.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        // GET: Products
         public async Task<IActionResult> Index(string searchString, int? categoryId, int? supplierId)
         {
 
@@ -57,18 +59,27 @@ namespace RetailStore.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> Create([Bind("ProductId,ProductName,Barcode,Price,Unit,CategoryId,SupplierId,ImageUpload")] Product product)
         {
+            // --- FIX LỖI VALIDATION ---
+            ModelState.Remove("Category");
+            ModelState.Remove("Supplier");
+            ModelState.Remove("ImageUpload");
+
+            // QUAN TRỌNG: Bỏ qua kiểm tra lỗi status vì form không có ô nhập status
+            ModelState.Remove("status");
+            // --------------------------
+
             if (ModelState.IsValid)
             {
                 product.CreatedAt = DateTime.Now;
 
+                // Tự động gán trạng thái là "active" cho sản phẩm mới
+                product.status = "active";
 
                 if (product.ImageUpload != null)
                 {
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/products");
-                    // Tạo thư mục nếu chưa có
                     if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + product.ImageUpload.FileName;
@@ -82,16 +93,24 @@ namespace RetailStore.Controllers
                     product.ImageUrl = "/images/products/" + uniqueFileName;
                 }
 
-
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Debug lỗi nếu vẫn không lưu được
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            foreach (var error in errors)
+            {
+                Console.WriteLine("Lỗi Validation Create: " + error.ErrorMessage);
+            }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", product.SupplierId);
             return View(product);
         }
 
+        // GET: Products/Edit/
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -104,17 +123,36 @@ namespace RetailStore.Controllers
             return View(product);
         }
 
+        // POST: Products/Edit/
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,Barcode,Price,Unit,CategoryId,SupplierId,CreatedAt,ImageUrl,ImageUpload")] Product product)
         {
             if (id != product.ProductId) return NotFound();
 
+            // --- FIX LỖI VALIDATION ---
+            ModelState.Remove("Category");
+            ModelState.Remove("Supplier");
+            ModelState.Remove("ImageUpload");
+            ModelState.Remove("status"); // Bỏ qua lỗi status null
+            // --------------------------
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Lấy dữ liệu cũ từ database (Dùng AsNoTracking để tránh xung đột)
+                    var existingProduct = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.ProductId == id);
 
+                    if (existingProduct == null) return NotFound();
+
+                    // 1. Giữ nguyên trạng thái (Status) cũ
+                    product.status = existingProduct.status;
+
+                    // 2. Giữ nguyên ngày tạo cũ
+                    product.CreatedAt = existingProduct.CreatedAt;
+
+                    // 3. Xử lý ảnh
                     if (product.ImageUpload != null)
                     {
                         string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/products");
@@ -127,11 +165,13 @@ namespace RetailStore.Controllers
                         {
                             await product.ImageUpload.CopyToAsync(fileStream);
                         }
-
-
                         product.ImageUrl = "/images/products/" + uniqueFileName;
                     }
-
+                    else
+                    {
+                        // Nếu không chọn ảnh mới -> Giữ ảnh cũ
+                        product.ImageUrl = existingProduct.ImageUrl;
+                    }
 
                     _context.Update(product);
                     await _context.SaveChangesAsync();
@@ -143,11 +183,11 @@ namespace RetailStore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", product.SupplierId);
             return View(product);
         }
-
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -168,12 +208,13 @@ namespace RetailStore.Controllers
             if (product != null)
             {
                 Console.WriteLine("Soft deleting product with ID: " + id);
-                product.status="deleted";
+                product.status = "deleted";
                 _context.Products.Update(product);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool ProductExists(int id)
         {
