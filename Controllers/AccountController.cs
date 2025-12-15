@@ -78,7 +78,7 @@ namespace RetailStore.Controllers
         {
             var model = new User();
 
-            ViewBag.Roles = new SelectList(new[] { "admin", "staff" });
+            ViewBag.Roles = new SelectList(new[] { "admin", "staff", "sales", "importer" });
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -110,7 +110,7 @@ namespace RetailStore.Controllers
                 ModelState.AddModelError("", "Không thể lưu tài khoản, vui lòng thử lại.");
             }
 
-            ViewBag.Roles = new SelectList(new[] { "admin", "staff" });
+            ViewBag.Roles = new SelectList(new[] { "admin", "staff", "sales", "importer" });
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -131,7 +131,7 @@ namespace RetailStore.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Roles = new SelectList(new[] { "admin", "staff" });
+            ViewBag.Roles = new SelectList(new[] { "admin", "staff", "sales", "importer" });
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return PartialView(user);
@@ -187,7 +187,7 @@ namespace RetailStore.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Roles = new SelectList(new[] { "admin", "staff" });
+            ViewBag.Roles = new SelectList(new[] { "admin", "staff", "sales", "importer" });
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
